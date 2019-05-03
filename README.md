@@ -12,17 +12,18 @@ In the following we'll refer to the *substraTEE-worker* architecture, which has 
 
 ## Overview
 
-The high level architecture of the implementation can be seen in the following image
+The high level architecture of the current implementation can be seen in the following diagram:
+
 ![Diagram](./substraTEE-worker-overview.svg)
 
 The main building blocks can be found in the following repositories:
 
-* [substraTEE-node](https://github.com/scs/substraTEE-node): A substrate node with a custom runtime module
-* [substraTEE-worker](https://github.com/scs/substraTEE-worker): A SGX-enabled service that performs a confidential state-transition-function
+* [substraTEE-node](https://github.com/scs/substraTEE-node): (custom substrate node) A substrate node with a custom runtime module
+* [substraTEE-worker](https://github.com/scs/substraTEE-worker) (client, worker-app, worker-enclave): A SGX-enabled service that performs a confidential state-transition-function
 
 ## Demo
 
-This repo will host a docker container to showcas basic functionality soon.
+This repo will host a docker container to showcase basic functionality soon.
 
 ## Acknowledgements
 
