@@ -10,7 +10,28 @@
 Different use cases for TEE's and potential software architectures have been analyzed and compared in [CONCEPTS](./CONCEPTS.md).
 In the following we'll refer to the *substraTEE-worker* architecture, which has been implemented because it supports the widest range of use cases.
 
-## Overview
+## Roadmap
+
+### M1 PoC1: single-TEE confidential state transition function
+off-chain worker runs STF within an Intel SGX enclave. The state is persisted in a sealed file which can only be read by that very enclave.
+
+The demo STF will be a simple counter.
+
+### M2 PoC2: single-TEE confidential state transition function in WASM
+In addition to M1, the STF is defined by WASM code which is run by a WASMI interpreter within an Intel SGX enclave.
+
+The demo STF will be a simple counter.
+
+### M3 simple enclave provisioning
+multiple workers can be assigned to a particular STF (contract). Only one of the enclaves will be master, the others serve as a failover backup.
+Additional enclaves join by supplying remote attestation (RA) from Intel IAS and get group keys from partially trusted provisioning services (PS).
+
+### M4 enclave provisioning 
+Enhanced provisioning (get rid of partially trusted PS).
+
+enclave joins by supplying RA. With every enclave membership change group keys are renewed using dynamic peer group key agreement among enclaves.
+
+## Overview M1
 
 The high level architecture of the current implementation can be seen in the following diagram:
 
