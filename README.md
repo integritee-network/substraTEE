@@ -58,7 +58,7 @@ To build and execute the code, follow these instructions:
    ```
 2. Build the docker image:
    ```
-   $ docker build -t substratee -f DockerfileM1
+   $ docker build -t substratee -f DockerfileM1 .
    ```
    This may take some time (~2h on a recent MacBook), so grab a cup of :coffee: or :tea: - or two.
 3. Start the docker image and get an interactive shell:
