@@ -39,7 +39,7 @@ ENV psw_dev_deb https://download.01.org/intel-sgx/linux-2.5/ubuntu18.04-server/l
 ENV psw_dbgsym_deb https://download.01.org/intel-sgx/linux-2.5/ubuntu18.04-server/libsgx-enclave-common-dbgsym_2.5.101.50123-bionic1_amd64.ddeb
 ENV substratee_node https://github.com/scs/substraTEE-node/archive/master.zip
 ENV substratee_worker https://github.com/scs/substraTEE-worker/archive/master.zip
-ENV rust_toolchain nightly-2019-04-26
+ENV rust_toolchain nightly
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TERM xterm
 
