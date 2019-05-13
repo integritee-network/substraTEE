@@ -37,8 +37,8 @@ ENV sdk_bin https://download.01.org/intel-sgx/linux-2.5/ubuntu18.04-server/sgx_l
 ENV psw_deb https://download.01.org/intel-sgx/linux-2.5/ubuntu18.04-server/libsgx-enclave-common_2.5.101.50123-bionic1_amd64.deb
 ENV psw_dev_deb https://download.01.org/intel-sgx/linux-2.5/ubuntu18.04-server/libsgx-enclave-common-dev_2.5.101.50123-bionic1_amd64.deb
 ENV psw_dbgsym_deb https://download.01.org/intel-sgx/linux-2.5/ubuntu18.04-server/libsgx-enclave-common-dbgsym_2.5.101.50123-bionic1_amd64.ddeb
-ENV substratee_node https://github.com/scs/substraTEE-node/archive/master.zip
-ENV substratee_worker https://github.com/scs/substraTEE-worker/archive/master.zip
+ENV substratee_node https://github.com/scs/substraTEE-node/archive/brenzi-v200.zip
+ENV substratee_worker https://github.com/scs/substraTEE/archive/marcel-preparationM1.zip
 ENV rust_toolchain nightly
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TERM xterm
@@ -91,11 +91,11 @@ RUN mkdir /substraTEE && \
 ### building the substraTEE components
 RUN source /opt/sgxsdk/environment && \
     source /root/.cargo/env && \
-    cd /substraTEE/substraTEE-node-master && \
+    cd /substraTEE/substraTEE-node-brenzi-v200 && \
     ./scripts/init.sh && \
     ./scripts/build.sh && \
     cargo build --release && \
-    cd /substraTEE/substraTEE-worker-master && \
+    cd /substraTEE/substraTEE-worker-marcel-preparationM1 && \
     SGX_MODE=SW make
 
 WORKDIR /substraTEE
