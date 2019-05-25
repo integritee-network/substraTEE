@@ -55,14 +55,14 @@ compilation modes: *Debug*, *Release*, *Pre-Release*, *Simulation*
 lanching modes: *Debug*, *Production*
 
 ### EPID 
-a group signature key known only to the quoting enclave. Only used for remote attestation.
+Enhanced Privacy ID (EPID). A group signature key known only to the quoting enclave. Only used for remote attestation.
 
-### SSID
-An SSID is needed to talk to IAS. Developers can obtain their SPID by [registering with Intel](https://software.intel.com/en-us/form/sgx-onboarding) (only allows to attest DEBUG encalves!)
+### SPID
+A Service Provider ID (SPID) is needed to talk to IAS. Developers can obtain their SPID by [registering with Intel](https://software.intel.com/en-us/form/sgx-onboarding) (only allows to attest DEBUG encalves!)
 
 You can request either *linkable* or *unlinkable* quote. 
 
-**tl;dr**: selecting UNLINKABLE is safe.
+**tl;dr**: selecting UNLINKABLE is a safe choice. But don't expect to be anonymous.
 
 In both cases, the quoting enclave uses a group signature for a quote. You can just decide if you wish two subsequent signatures to be linkable (an observer learns "quote was signed by same platform") or not.
 
@@ -77,3 +77,7 @@ Moreover, remote attestation in production mode can only be taken out with such 
 
 TODO: SCS is looking into the options.
 
+## Literature
+chaotic list of pointers:
+
+* [review of SGX PSE for monotonic counters and trusted time](https://davejingtian.org/2017/11/10/some-notes-on-the-monotonic-counter-in-intel-sgx-and-me/)
