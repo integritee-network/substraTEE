@@ -18,9 +18,35 @@ The SP therefore requests a quote from the application and sends that quote to I
 
 The issue here is that IAS only talks to registered clients. You need to register in order to get a SPID which needs to be supplied along with requests.
 
+### Attestation Registry On-Chain
+
 It isn't practical to ask every client to register with Intel and perform RA before every request. Therefore we'd rather let the substraTEE-worker operators attest their enclaves with IAS and write the signed quote and their certificate to the blockchain for everyone to verify.
 
-TODO: how exactly can the user verify the sealing key?
+This does change the the attestation protocol. Now the SP and the enclave in the above scheme are both running on the same machine. substraTEE-worker will itself perform an attestation protocol with its enclave and get the quote signed by IAS. Like this, only substraTEE operators need to register with IAS.
+
+The attestation report which is written to an on-chain registry contains:
+* enclave quote
+   * report body
+      * MRENCLAVE (hash of enclave build)
+      * Product ID (hard-coded in substraTEE source)
+      * Security Version (hard-coded in substraTEE source)
+      * user data: 
+         * enclave-individual signing pubkey
+         * latest block hash
+   * ...
+* IAS response
+   * body
+      * status (OK||CONFIGURATION_NEEDED|GROUP_REVOKED....)
+      * timestamp
+      * enclave quote
+      * ...
+   * IAS certificate 
+   * IAS signature over above body
+
+Any user can now verify IAS signature and MRENCLAVE (given the substraTEE enclave can be build deterministically)
+
+The worker can now publish his sealing pubkey, signed with its enclave-individual signing key stated in the quote.
+
 
 ## secret provisioning
 
@@ -75,7 +101,13 @@ Due to Intel policy, developers can only compile enclaves in *Debug*, *Pre-Relea
 In order to compile enclaves in *Release* mode (and run them in *Production* mode), the SW vendor has to apply for a SGX production license. 
 Moreover, remote attestation in production mode can only be taken out with such production license.
 
-TODO: SCS is looking into the options.
+*SCS is looking into options how to apply such policy to a decentralized system with Intel.*
+
+**solution candidate**
+1. A set of *companies* (i.e. SCS, web3 foundation) register a production license with Intel
+1. substraTEE-workers send their RA quotes to the chain.
+1. the *company* listens to new RA quotes and sends them to IAS with the *company's* SPID.
+1. the *company* sends the IAS report to the chain.
 
 ## Literature
 chaotic list of pointers:

@@ -17,7 +17,7 @@ It cannot be assured that calls to the enclave happen sequentially. They can hap
 
 **Countermeasures**
 
-* monotonic counter (i.e. Intel PSE, based on ME). If you choose to trust Intel ME!
+* monotonic counter (i.e. Intel PSE, based on ME. Not available on server HW). If you choose to trust Intel ME!
 * Blockchain registers the hash of the latest state, so a state update is only valid when it refers to the latest registered state. This doesn't solve the cause, but the symptoms.
 
 
