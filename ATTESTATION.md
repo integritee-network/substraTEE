@@ -43,7 +43,7 @@ The attestation report which is written to an on-chain registry contains:
    * IAS certificate 
    * IAS signature over above body
 
-Any user can now verify IAS signature and MRENCLAVE (given the substraTEE enclave can be build deterministically)
+Any user can now verify IAS signature and MRENCLAVE (given the substraTEE enclave can be build deterministically). See the [example](https://github.com/rodolfoams/sgx-retrieve-identity/blob/5be913b96b2a6e5a0e1158ad169b977507291faa/Makefile#L253) how you can extract MRENCLAVE after building the enclave
 
 The worker can now publish his sealing pubkey, signed with its enclave-individual signing key stated in the quote.
 
