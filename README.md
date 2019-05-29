@@ -7,6 +7,18 @@
 
 ![vision](./substraTEE-vision.png)
 
+What substraTEE aims to provide:
+
+* confidential decentralized state transition functions
+  * private transactions
+  * private smart contracts
+  * off-chain confidential personal data records (GDPR)
+* scalability by providing a 2nd layer to substrate-based blockchains
+  * off-chain smart contracts
+  * payment hubs
+* trusted chain bridges
+* trusted oracles
+
 ## Concept Study
 
 Different use cases for TEE's and potential software architectures have been analyzed and compared in [CONCEPTS](./CONCEPTS.md).
