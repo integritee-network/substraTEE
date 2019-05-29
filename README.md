@@ -5,10 +5,14 @@
 *substraTEE* is an extension to [Parity Substrate](https://docs.substrate.dev/), allowing to call a custom state transition function inside a Trusted Execution Environment (TEE), namely an Intel SGX enclave thereby providing confidentiality and integrity. The enclaves operate on an encrypted state which can be read and written only by a set of provisioned and remote-attested enclaves.
 *substraTEE* enables use cases demanding transaction privacy as well as atomic cross-chain transfers (bridges).
 
+![vision](./substraTEE-vision.png)
+
 ## Concept Study
 
 Different use cases for TEE's and potential software architectures have been analyzed and compared in [CONCEPTS](./CONCEPTS.md).
 In the following we'll refer to the *substraTEE-worker* architecture, which has been implemented because it supports the widest range of use cases.
+
+An overview over security aspects can be found in [SECURITY](./SECURITY.md). Remote attestation deviates from the usual Intel SGX scenario and is presented in [ATTESTATION](./ATTESTATION.md)
 
 ## Roadmap
 
