@@ -49,6 +49,18 @@ Any user can now verify IAS signature and MRENCLAVE (given the substraTEE enclav
 
 The worker can now publish his sealing pubkey, signed with its enclave-individual signing key stated in the quote.
 
+workers will repeat remote attestation in reasonable regular intervals (i.e. once per month)
+
+### Enclave Registry On-Chain
+In order for the chain validator to be able to verify MRENCLAVE, there must be a consensus about MRENCLAVE of the valid version of substraTEE.
+
+substraTEE developers will propose code updates to be voted on. Validators check the code and 
+vote on behalf or against each proposal. MRENCLAVE can be reproduced by cloning the substraTEE-worker repo, building it and then:
+```
+sgx_sign dump -enclave enclave.signed.so -dumpfile out.log
+```
+
+TODO: we might need to provide a docker environment the achieve deterministic builds.
 
 ## secret provisioning
 
