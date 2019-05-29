@@ -24,6 +24,8 @@ It isn't practical to ask every client to register with Intel and perform RA bef
 
 This does change the the attestation protocol. Now the SP and the enclave in the above scheme are both running on the same machine. substraTEE-worker will itself perform an attestation protocol with its enclave and get the quote signed by IAS. Like this, only substraTEE operators need to register with IAS.
 
+![Sequence Diagram](./attestation_registry_sequence.svg)
+
 The attestation report which is written to an on-chain registry contains:
 * enclave quote
    * report body
