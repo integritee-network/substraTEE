@@ -32,7 +32,7 @@ The attestation report which is written to an on-chain registry contains:
       * MRENCLAVE (hash of enclave build)
       * Product ID (hard-coded in substraTEE source)
       * Security Version (hard-coded in substraTEE source)
-      * user data: 
+      * user data is hash of context:
          * enclave-individual signing pubkey
          * latest block hash
    * ...
