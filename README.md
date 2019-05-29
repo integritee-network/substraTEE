@@ -47,6 +47,18 @@ Enhanced provisioning (get rid of partially trusted PS).
 
 enclave joins by supplying RA. With every enclave membership change group keys are renewed using dynamic peer group key agreement among enclaves.
 
+### *M5 support for ink contracts*
+
+*(development not yet funded)*
+
+[ink!](https://medium.com/block-journal/introducing-substrate-smart-contracts-with-ink-d486289e2b59) is substrate's domain specific contract language on top of Rust. This milestone shall bring ink! contracts to substraTEE.
+
+### future
+
+* performance benchmarks and optimization
+* testnet for stress-tests and showcasing
+* use cases: bridges, payment hubs, ...
+
 ## Overview M1
 
 The high level architecture of the current implementation can be seen in the following diagram:
