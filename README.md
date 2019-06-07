@@ -225,9 +225,9 @@ To build and execute the code, follow these instructions:
    ```
    This will output something like the following, where the actual values may be different:
    ```shell
-   d91eabb2d96b3068c9b761cf629169960957254c6ee3917ba472af9cbf4bdbe3  ./bin/worker_enclave.compact.wasm
+   d7331d5344a99696a8135212475e2c6b605cea88e9edd594773181205dda1531  ./bin/worker_enclave.compact.wasm
    ```
-   The first long number is the SHA256 hash of the WASM code. Copy this value (in the example case `d91e...dbe3`) into the clipboard.
+   The first long number is the SHA256 hash of the WASM code. Copy this value (in the example case `d733...1531`) into the clipboard (Control-C).
 
 8. Start the substraTEE-client to send an extrinsic to the substraTEE-node that is then forwarded and processed by the substraTEE-worker. The code to increment the counter comes from the WASM file (`bin/worker_enclave.compact.wasm`). The user provides the hash of the code he wants to execute.
    ```shell
@@ -247,17 +247,28 @@ To build and execute the code, follow these instructions:
    ```
    After the first iteration, the counter of Alice will have the value 52. This is correct as the following code is executed in the WASMI in the enclave: `new = old + increment + 10` (see `substraTEE-worker/enclave/wasm/src/lib.rs`).
 
-10. Check the output of the substraTEE-worker by calling `tail -f /substraTEE/worker.log`. The most important section is
+10. Check the output of the substraTEE-worker by calling `less /substraTEE/worker.log`. The most important section is (near the end)
     ```
     [>] Decrypt and process the payload
-    ...
-    [Enclave] SHA256 of WASM code identical
-    ...
+        ...
+        [Enclave] SHA256 of WASM code identical
+        ...
     [<] Message decoded and processed in the enclave
     ```
     which indicates that the SHA256 hash passed by the client matches the calculated hash of the code that should be executed.
 
 11. When sending a different hash from the substraTEE-client to the substraTEE-worker, the code will not be executed and the counter therefore not updated.
+
+     The client will wait infinitely for the callConfirmed event which will never be sent by the worker as the code was not executed. The client must be killed (Control-C) and the log file of the worker can be inspected with `less /substraTEE/worker.log`. At the end of the log file there is a different output than before
+     ```
+     [>] Decrypt and process the payload
+         ...
+         [Enclave] SHA256 of WASM code not matching
+         [Enclave]   Wanted by client    : [...]
+         [Enclave]   Calculated by worker: [...]
+         [Enclave] Returning ERROR_UNEXPECTED and not updating STF
+     ```
+     which indicates that the SHA256 hash passed by the client **DOES NOT** match the calculated hash of the code that should be executed.
 
 Whenever you perform the steps 8. and 9., you will see the counter incrementing.
 
