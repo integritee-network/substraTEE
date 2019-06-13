@@ -80,22 +80,22 @@ The high level architecture of the proposed architecture for M3 and M4 can be se
 where M3 includes only the *docker image 1* and the *Intel Attestation Service (IAS)* and M4 includes the three *docker images* and the *Intel Attestation Service (IAS)*.
 
 ### Terms
-* Shielding key: This key is used by the substraTEE-client to encrypt the payload. It is common to all enclaves.
-* State encryption key: This key is used to encrypt and decrypt the storage. It is common to all enclaves.
-* Signing key: This key is used to sign transactions for the substraTEE-node. It is unique for every enclave.
+* Shielding key: used by the substraTEE-client to encrypt the call in order to protect caller privacy. It is common to all enclaves.
+* State encryption key: used to encrypt and decrypt the state storage. It is common to all enclaves.
+* Signing key: used to sign transactions for the substraTEE-node. The corresponding account must be funded in order to pay for chain fees. It is unique for every enclave.
 
 ### Description
 The *substraTEE-node* includes two additional runtime modules:
 * substraTEE-proxy module: It forwards encrypted payloads to substraTEE-worker (event based) and indicates the finalization of the transaction (event based). This is the same functionality as for M1 and M2.
-* substraTEE-enclave module: It checks the IAS reports and keeps track of the registered enclaves. It provides the following API interfaces:
+* substraTEE-registry module: It checks the IAS reports and keeps track of the registered enclaves. It provides the following API interfaces:
   * Register an enclave
   * Remove an enclave
   * Get the list of enclaves
 
-The *substraTEE-worker* checks on the first start-up if "his" enclave is already registered on the chain. If this is not the case, it requests a remote attestion from the Intel Attestation Service (IAS) and sends the report to the *substraTEE-registry module* to register his enclave. If there is already an enclave (p.ex. from a different substraTEE-worker) registered on the chain, the substraTEE-worker gives his enclave the address of (any of) the registered enclave(s) so that it can get the *shielding and state encryption key* and the *encrypted storage*.
+The *substraTEE-worker* checks on the first start-up if "his" enclave is already registered on the chain. If this is not the case, it requests a remote attestion from the Intel Attestation Service (IAS) and sends the report to the *substraTEE-registry module* to register his enclave. If there is already an enclave (p.ex. from a different substraTEE-worker) registered on the chain, the substraTEE-worker gives his enclave the address of (any of) the registered enclave(s) so that it can get the *shielding and state encryption private key* and the most recent *encrypted stte storage*.
 The remaining functionality of the *substraTEE-worker* stays the same as for M1 and M2 (get the encrypted payload, use the enclave to decode the payload and perform the STF in the enclave).
 
-The exchange of critical information between the enclaves is performed over a secure connection (TLS). The two enclaves perform a mutual remote attestation.
+The exchange of critical information between the enclaves is performed over a secure connection (TLS). The two enclaves perform a mutual remote attestation before exchanging any secrets.
 
 ## Demo
 
