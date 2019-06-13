@@ -83,7 +83,6 @@ where M3 includes only the *docker image 1* and the *Intel Attestation Service (
 * Shielding key: This key is used by the substraTEE-client to encrypt the payload. It is common to all enclaves.
 * State encryption key: This key is used to encrypt and decrypt the storage. It is common to all enclaves.
 * Signing key: This key is used to sign transactions for the substraTEE-node. It is unique for every enclave.
-// * Master enclave: The first enclave registered on the chain becomes the master of the enclaves and provides the required keys to newly registering enclaves. If the master enclaves is decommissioned, the next enclave automatically takes over the master functionality. The order is determined by the time of registration.
 
 ### Description
 The *substraTEE-node* includes two additional runtime modules:
@@ -93,10 +92,10 @@ The *substraTEE-node* includes two additional runtime modules:
   * Remove an enclave
   * Get the list of enclaves
 
-The *substraTEE-worker* checks on the first start-up if "his" enclave is already registered on the chain. If this is not the case, it requests a remote attestion from the Intel Attestation Service (IAS) and sends the report to the *substraTEE-registry module* to register his enclave. If there is already an enclave (p.ex. from a different substraTEE-worker) registered on the chain, the substraTEE-worker gives his enclave the address of any of the registered enclave(s) so that it can get the *shielding and state encryption key* + state.
+The *substraTEE-worker* checks on the first start-up if "his" enclave is already registered on the chain. If this is not the case, it requests a remote attestion from the Intel Attestation Service (IAS) and sends the report to the *substraTEE-registry module* to register his enclave. If there is already an enclave (p.ex. from a different substraTEE-worker) registered on the chain, the substraTEE-worker gives his enclave the address of (any of) the registered enclave(s) so that it can get the *shielding and state encryption key* and the *encrypted storage*.
 The remaining functionality of the *substraTEE-worker* stays the same as for M1 and M2 (get the encrypted payload, use the enclave to decode the payload and perform the STF in the enclave).
 
-The exchange of critical information between the enclaves is performed over a secure connection. **mutual-RA**
+The exchange of critical information between the enclaves is performed over a secure connection (TLS). The two enclaves perform a mutual remote attestation.
 
 ## Demo
 
