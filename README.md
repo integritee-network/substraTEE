@@ -6,6 +6,7 @@
 *substraTEE* enables use cases demanding transaction privacy as well as atomic cross-chain transfers (bridges).
 
 ![vision](./substraTEE-vision.png)
+*SubstraTEE Target Architecture with Direct Invocation*
 
 What substraTEE aims to provide:
 
@@ -34,8 +35,8 @@ An overview over security aspects can be found in [SECURITY](./SECURITY.md). Rem
 |    M2           	|    Proxy                    	|    Rust or WASM             	|    1                    	|    2                             	|    Intel                                     	|  -  |     	 	
 |    M3           	|    Proxy                    	|    Rust or WASM             	|    1                    	|    2                             	|    Intel                                     	|  X  |
 |    M4           	|    Proxy                    	|    Rust or WASM             	|    N (redundant)        	|    1+N                           	|    Intel                                     	|  X  |   
-|    future       	|    Proxy                    	|    Rust or WASM or   Ink    	|    N (redundant)        	|    2                             	|    Intel + ARM TrustZone + Keystone   (?)    	|  X  |       
-|    future        |    **Direct**               	|    Rust or WASM or   Ink    	|    N (master + failover)    	|    **<< 1**                	|    Intel + ARM TrustZone + Keystone   (?)    	|  X  |       
+|    future       	|    Proxy                    	|    Rust or WASM or   **Ink**	|    N (redundant)        	|    2                             	|    Intel + ARM TrustZone + Keystone   (?)    	|  X  |       
+|    future        |    **Direct**               	|    Rust or WASM or   **Ink**	|    N (master + failover)    	|    **<< 1**                	|    Intel + ARM TrustZone + Keystone   (?)    	|  X  |       
 
 
 ### M1 PoC1: single-TEE confidential state transition function
