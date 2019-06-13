@@ -5,7 +5,7 @@
 viewBox="0 0 29700 21000"
  xmlns:xlink="http://www.w3.org/1999/xlink">
  <defs>
-  <font id="FontID11" horiz-adv-x="549" font-variant="normal" style="fill-rule:nonzero" font-style="normal" font-weight="700">
+  <font id="FontID11" horiz-adv-x="549" font-variant="normal" style="fill-rule:nonzero" font-weight="700">
 	<font-face 
 		font-family="Consolas">
 		<font-face-src>
@@ -35,7 +35,7 @@ viewBox="0 0 29700 21000"
    <glyph unicode="v" horiz-adv-x="549" d="M344.819 0l-137.165 0 -197.165 496 132.85 0 103.339 -281.827 30.8346 -90.8346 30.1417 86.9921 103.843 285.669 128 0 -194.677 -496z"/>
    <glyph unicode="y" horiz-adv-x="549" d="M365.827 54.6772c-17.1654,-43.0236 -35.1496,-80.6929 -53.8268,-113.165 -18.8346,-32.5039 -39.3386,-59.5276 -61.8268,-81.1654 -22.5197,-21.8583 -47.4961,-38.0157 -74.9921,-49.0079 -27.5276,-10.8346 -58.3622,-16.3465 -92.5039,-16.3465 -8.18898,0 -17.0079,0.346457 -26.6772,1.16535 -9.51181,0.850394 -19.3386,2.17323 -29.5118,3.68504l0 101.165c3.84252,-0.661417 8.34646,-1.35433 13.5118,-2.17323 5.00787,-0.850394 10.3307,-1.51181 15.8425,-2.01575 5.48031,-0.472441 11.1496,-0.976378 16.8189,-1.32283 5.66929,-0.314961 10.9921,-0.503937 15.8425,-0.503937 13.6693,0 26.3307,2.67717 38.1732,7.84252 11.6535,5.16535 22.4882,12.5039 32.5039,21.6693 9.82677,9.32283 18.8346,20.315 26.9921,33.3228 8.15748,12.8504 15.3386,26.8346 21.4803,42.1732l-197.165 496 132.85 0 103.339 -281.669 30.8346 -90.3307 30.1417 86.8346 103.843 285.165 128 0 -173.669 -441.323z"/>
   </font>
-  <font id="FontID1" horiz-adv-x="549" font-variant="normal" style="fill-rule:nonzero" font-style="normal,italic" font-weight="400">
+  <font id="FontID1" horiz-adv-x="549" font-variant="normal" style="fill-rule:nonzero" font-style="italic" font-weight="400">
 	<font-face 
 		font-family="Consolas">
 		<font-face-src>
@@ -102,8 +102,8 @@ viewBox="0 0 29700 21000"
   </font>
   <style type="text/css">
    <![CDATA[
-    @font-face { font-family:"Consolas";font-variant:normal;font-style:normal;font-weight:bold;src:url("#FontID11") format(svg)}
-    @font-face { font-family:"Consolas";font-variant:normal;font-style:normal,italic;font-weight:normal;src:url("#FontID1") format(svg)}
+    @font-face { font-family:"Consolas";font-variant:normal;font-weight:bold;src:url("#FontID11") format(svg)}
+    @font-face { font-family:"Consolas";font-variant:normal;font-style:italic;font-weight:normal;src:url("#FontID1") format(svg)}
     @font-face { font-family:"Consolas";font-variant:normal;font-style:normal;font-weight:normal;src:url("#FontID0") format(svg)}
     .str1 {stroke:#EBECEC;stroke-width:20;stroke-miterlimit:22.9256}
     .str0 {stroke:#D9DADA;stroke-width:20;stroke-miterlimit:22.9256}
@@ -175,8 +175,8 @@ viewBox="0 0 29700 21000"
    <path id="1" class="fil3" d="M10000 4515l-8000 0 0 -30 8000 0 12.78 15 -12.78 15zm0 -30l12.78 0 0 15 -12.78 -15zm-12.78 9015l0 -9000 25.56 0 0 9000 -12.78 15 -12.78 -15zm25.56 0l0 15 -12.78 0 12.78 -15zm-8012.78 -15l8000 0 0 30 -8000 0 -12.78 -15 12.78 -15zm0 30l-12.78 0 0 -15 12.78 15zm12.78 -9015l0 9000 -25.56 0 0 -9000 12.78 -15 12.78 15zm-25.56 0l0 -15 12.78 0 -12.78 15z"/>
   </g>
   <text x="8677.43" y="4983.31"  class="fil4 fnt0">docker </text>
-  <text x="9647.28" y="5809.53"  class="fil4 fnt0">3</text>
   <text x="8871.4" y="5396.42"  class="fil4 fnt0">image </text>
+  <text x="9647.28" y="5809.53"  class="fil4 fnt0">3</text>
   <rect class="fil5 str2" x="2500" y="5000" width="5500" height="4000"/>
   <rect class="fil6 str2" x="2500" y="10000" width="5500" height="3000"/>
   <rect class="fil7 str2" x="3000" y="11000" width="4500" height="1000"/>
@@ -233,9 +233,9 @@ viewBox="0 0 29700 21000"
    <polygon class="fil2" points="20000,2000 28000,2000 28000,13500 20000,13500 "/>
    <path id="1" class="fil3" d="M28000 2015l-8000 0 0 -30 8000 0 12.75 15 -12.75 15zm0 -30l12.75 0 0 15 -12.75 -15zm-12.75 11515l0 -11500 25.5 0 0 11500 -12.75 15 -12.75 -15zm25.5 0l0 15 -12.75 0 12.75 -15zm-8012.75 -15l8000 0 0 30 -8000 0 -12.75 -15 12.75 -15zm0 30l-12.75 0 0 -15 12.75 15zm12.75 -11515l0 11500 -25.5 0 0 -11500 12.75 -15 12.75 15zm-25.5 0l0 -15 12.75 0 -12.75 15z"/>
   </g>
+  <text x="27647.28" y="3309.53"  class="fil4 fnt7">1</text>
   <text x="26871.4" y="2896.42"  class="fil4 fnt7">image </text>
   <text x="26677.43" y="2483.31"  class="fil4 fnt7">docker </text>
-  <text x="27647.28" y="3309.53"  class="fil4 fnt7">1</text>
   <rect class="fil5 str3" x="20500" y="5000" width="5500" height="4000"/>
   <rect class="fil8 str3" x="21000" y="7500" width="2000" height="1000"/>
   <rect class="fil8 str3" x="23500" y="7500" width="2000" height="1000"/>
@@ -248,8 +248,8 @@ viewBox="0 0 29700 21000"
   <rect class="fil6 str3" x="20500" y="10000" width="5500" height="3000"/>
   <rect class="fil7 str3" x="21000" y="11000" width="4500" height="1000"/>
   <text x="22551.73" y="11594.4"  class="fil4 fnt8">enclave 1</text>
+  <text x="26456.9" y="13218.89"  class="fil4 fnt8">State 1</text>
   <text x="26301.73" y="12888.41"  class="fil4 fnt8">Encrypted</text>
-  <text x="26301.73" y="13218.89"  class="fil4 fnt8">Storage 1</text>
   <text x="21591.58" y="10606.2"  class="fil4 fnt9">substraTEE-worker 1</text>
   <g>
    <g>
@@ -283,9 +283,9 @@ viewBox="0 0 29700 21000"
    <polygon class="fil2" points="11000,4500 19000,4500 19000,13500 11000,13500 "/>
    <path id="1" class="fil3" d="M19000 4515l-8000 0 0 -30 8000 0 12.78 15 -12.78 15zm0 -30l12.78 0 0 15 -12.78 -15zm-12.78 9015l0 -9000 25.56 0 0 9000 -12.78 15 -12.78 -15zm25.56 0l0 15 -12.78 0 12.78 -15zm-8012.78 -15l8000 0 0 30 -8000 0 -12.78 -15 12.78 -15zm0 30l-12.78 0 0 -15 12.78 15zm12.78 -9015l0 9000 -25.56 0 0 -9000 12.78 -15 12.78 15zm-25.56 0l0 -15 12.78 0 -12.78 15z"/>
   </g>
+  <text x="17677.43" y="4983.31"  class="fil4 fnt11">docker </text>
   <text x="17871.4" y="5396.42"  class="fil4 fnt11">image </text>
   <text x="18647.28" y="5809.53"  class="fil4 fnt11">2</text>
-  <text x="17677.43" y="4983.31"  class="fil4 fnt11">docker </text>
   <rect class="fil5 str3" x="11500" y="5000" width="5500" height="4000"/>
   <rect class="fil6 str3" x="11500" y="10000" width="5500" height="3000"/>
   <rect class="fil7 str3" x="12000" y="11000" width="4500" height="1000"/>
@@ -299,7 +299,7 @@ viewBox="0 0 29700 21000"
   <text x="15034.49" y="8420.6"  class="fil4 fnt12">module</text>
   <text x="13551.73" y="11594.4"  class="fil4 fnt12">enclave 2</text>
   <text x="17301.73" y="12888.41"  class="fil4 fnt12">Encrypted</text>
-  <text x="17301.73" y="13218.89"  class="fil4 fnt12">Storage 2</text>
+  <text x="17456.9" y="13218.89"  class="fil4 fnt12">State 2</text>
   <text x="12591.58" y="10606.2"  class="fil4 fnt13">substraTEE-worker 2</text>
   <g>
    <g>
@@ -402,8 +402,8 @@ viewBox="0 0 29700 21000"
    </g>
   </g>
   <text x="10275.12" y="6463.08"  class="fil4 fnt18">p2p</text>
+  <text x="8456.9" y="13218.89"  class="fil4 fnt19">State 3</text>
   <text x="8301.73" y="12888.41"  class="fil4 fnt19">Encrypted</text>
-  <text x="8301.73" y="13218.89"  class="fil4 fnt19">Storage 3</text>
   <text x="3000" y="16094.4"  class="fil4 fnt19">Shielding key</text>
   <text x="2250" y="15106.2"  class="fil4 fnt20">Shared keys</text>
   <text x="7000" y="15106.2"  class="fil4 fnt20">Enclave specific keys</text>

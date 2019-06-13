@@ -29,14 +29,14 @@ An overview over security aspects can be found in [SECURITY](./SECURITY.md). Rem
 
 ## Roadmap
 
-|    Milestone    	|    Request    Invocation    	|    STF                      	|    # Workers per STF    	|    On-chain tx per invocation    	|    Supported TEE Manufact.                   	|  Remote Attestation Registry  |     
+|    Milestone    	|    Request    Invocation    	|    STF                      	|    # Workers per STF    	|    On-chain tx per invocation    	|    Supported TEE Manufact.                   	|  Remote Attestation Registry  |
 |-----------------	|-----------------------------	|-----------------------------	|-------------------------	|----------------------------------	|----------------------------------------------	| ---|
-|    M1           	|    Proxy                    	|    Rust                     	|    1                    	|    2                             	|    Intel                                     	|   -  |     	
-|    M2           	|    Proxy                    	|    Rust or WASM             	|    1                    	|    2                             	|    Intel                                     	|  -  |     	 	
+|    M1           	|    Proxy                    	|    Rust                     	|    1                    	|    2                             	|    Intel                                     	|   -  |
+|    M2           	|    Proxy                    	|    Rust or WASM             	|    1                    	|    2                             	|    Intel                                     	|  -  |
 |    M3           	|    Proxy                    	|    Rust or WASM             	|    1                    	|    2                             	|    Intel                                     	|  X  |
-|    M4           	|    Proxy                    	|    Rust or WASM             	|    N (redundant)        	|    1+N                           	|    Intel                                     	|  X  |   
-|    future       	|    Proxy                    	|    Rust or WASM or   **Ink**	|    N (redundant)        	|    2                             	|    Intel + ARM TrustZone + Keystone   (?)    	|  X  |       
-|    future        |    **Direct**               	|    Rust or WASM or   **Ink**	|    N (master + failover)    	|    **<< 1**                	|    Intel + ARM TrustZone + Keystone   (?)    	|  X  |       
+|    M4           	|    Proxy                    	|    Rust or WASM             	|    N (redundant)        	|    1+N                           	|    Intel                                     	|  X  |
+|    future       	|    Proxy                    	|    Rust or WASM or   **Ink**	|    N (redundant)        	|    2                             	|    Intel + ARM TrustZone + Keystone   (?)    	|  X  |
+|    future        |    **Direct**               	|    Rust or WASM or   **Ink**	|    N (master + failover)    	|    **<< 1**                	|    Intel + ARM TrustZone + Keystone   (?)    	|  X  |
 
 
 ### M1 PoC1: single-TEE confidential state transition function
@@ -103,7 +103,7 @@ The *substraTEE-node* includes two additional runtime modules:
   * Remove an enclave
   * Get the list of enclaves
 
-The *substraTEE-worker* checks on the first start-up if "his" enclave is already registered on the chain. If this is not the case, it requests a remote attestion from the Intel Attestation Service (IAS) and sends the report to the *substraTEE-registry module* to register his enclave. If there is already an enclave (p.ex. from a different substraTEE-worker) registered on the chain, the substraTEE-worker gives his enclave the address of (any of) the registered enclave(s) so that it can get the *shielding and state encryption private key* and the most recent *encrypted stte storage*.
+The *substraTEE-worker* checks on the first start-up if "his" enclave is already registered on the chain. If this is not the case, it requests a remote attestion from the Intel Attestation Service (IAS) and sends the report to the *substraTEE-registry module* to register his enclave. If there is already an enclave (p.ex. from a different substraTEE-worker) registered on the chain, the substraTEE-worker gives his enclave the address of (any of) the registered enclave(s) so that it can get the *shielding and state encryption private key* and the most recent *encrypted state storage*.
 The remaining functionality of the *substraTEE-worker* stays the same as for M1 and M2 (get the encrypted payload, use the enclave to decode the payload and perform the STF in the enclave).
 
 The exchange of critical information between the enclaves is performed over a secure connection (TLS). The two enclaves perform a mutual remote attestation before exchanging any secrets.
