@@ -28,6 +28,16 @@ An overview over security aspects can be found in [SECURITY](./SECURITY.md). Rem
 
 ## Roadmap
 
+|    Milestone    	|    Request    Invocation    	|    STF                      	|    # Workers per STF    	|    On-chain tx per invocation    	|    Supported TEE Manufact.                   	|  Remote Attestation Registry  |     
+|-----------------	|-----------------------------	|-----------------------------	|-------------------------	|----------------------------------	|----------------------------------------------	| ---|
+|    M1           	|    Proxy                    	|    Rust                     	|    1                    	|    2                             	|    Intel                                     	|   -  |     	
+|    M2           	|    Proxy                    	|    Rust or WASM             	|    1                    	|    2                             	|    Intel                                     	|  -  |     	 	
+|    M3           	|    Proxy                    	|    Rust or WASM             	|    1                    	|    2                             	|    Intel                                     	|  X  |
+|    M4           	|    Proxy                    	|    Rust or WASM             	|    N (redundant)        	|    1+N                           	|    Intel                                     	|  X  |   
+|    future       	|    Proxy                    	|    Rust or WASM or   Ink    	|    N (redundant)        	|    2                             	|    Intel + ARM TrustZone + Keystone   (?)    	|  X  |       
+|    future        |    **Direct**               	|    Rust or WASM or   Ink    	|    N (master + failover)    	|    **<< 1**                	|    Intel + ARM TrustZone + Keystone   (?)    	|  X  |       
+
+
 ### M1 PoC1: single-TEE confidential state transition function
 off-chain worker runs STF within an Intel SGX enclave. The state is persisted in a sealed file which can only be read by that very enclave.
 
