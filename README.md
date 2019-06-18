@@ -49,23 +49,26 @@ In addition to M1, the STF is defined by WASM code which is run by a WASMI inter
 
 The demo STF will be a simple counter.
 
-### M3 simple enclave provisioning
-multiple workers can be assigned to a particular STF (contract). Only one of the enclaves will be master, the others serve as a failover backup.
-Additional enclaves join by supplying remote attestation (RA) from Intel IAS and get group keys from partially trusted provisioning services (PS).
+### M3 Remote Attestation Registry
 
-### M4 enclave provisioning
-Enhanced provisioning (get rid of partially trusted PS).
+substraTEE-worker can remote-attest its own enclave with Intel Attestation Service (IAS). The report signed by IAS is then registered on-chain with substraTEE-registry runtime module. Users can verify a worker’s IAS report before interacting with it. So they can be certain that the correct code is running on a genuine SGX CPU.
 
-enclave joins by supplying RA. With every enclave membership change group keys are renewed using dynamic peer group key agreement among enclaves.
+### M4 Redundancy and Secret Provisioning
 
-### *M5 support for ink contracts*
+Several substraTEE-workers running on different machines can redundantly operate on the same STF. This guarantees that the STF survives the loss of a few SGX machines (going offline, breaking down, denial-of-service). Moreover, this improves integrity guarantees as all the workers register call receipts including the hash of the new state. A single compromised enclave can therefore only break confidentiality, but not integrity, as manipulation would be evident to anyone. 
+Secret sharing among a dynamic set of worker enclaves must be implemented for such redundancy.
+
+### *FUTURE*
+
+#### support for ink contracts
 
 *(development not yet funded)*
 
 [ink!](https://medium.com/block-journal/introducing-substrate-smart-contracts-with-ink-d486289e2b59) is substrate's domain specific contract language on top of Rust. This milestone shall bring ink! contracts to substraTEE.
 
-### future
+### other
 
+* direct invocation
 * performance benchmarks and optimization
 * testnet for stress-tests and showcasing
 * use cases: bridges, payment hubs, ...
