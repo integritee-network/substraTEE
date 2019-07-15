@@ -30,3 +30,6 @@ compose extrinsic 	| &#9745;				| &#9745;				| 						| 						| 						| 					| &#
 - wasm invokation's impact is negligible
 - If the current RSA de/-encryption process is optimized, >1000 tx/s, is achievable.
 
+
+## Testsetup
+All tests have been performend on an Intel NUC NUC8i3BEH2, Bean Canyon i3-8109U 3.0 GHz.
