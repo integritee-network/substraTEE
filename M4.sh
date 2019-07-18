@@ -74,13 +74,13 @@ then
         \"/substraTEE/start_worker2.sh\"" Enter
 
     # start the substratee-client in pane 2
-    # tmux send-keys -t2 "docker run -ti \
-    #     --device /dev/isgx \
-    #     -v $(pwd)/output:/substraTEE/output \
-    #     -v $(pwd)/rust-sgx-sdk:/root/sgx \
-    #     -v /var/run/aesmd:/var/run/aesmd \
-    #     substratee \
-    #     \"/substraTEE/start_client.sh\"" Enter
+    tmux send-keys -t2 "docker run -ti \
+        --ip=192.168.10.30 \
+        --network=substratee-net \
+        -v $(pwd)/output:/substraTEE/output \
+        -v /home/marcel/substraTEE-worker:/substraTEE/worker_local \
+        substratee \
+        \"/substraTEE/start_client.sh\"" Enter
 fi
 
 # Attach to session

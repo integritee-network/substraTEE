@@ -37,8 +37,8 @@ ENV sdk_bin https://download.01.org/intel-sgx/linux-2.5/ubuntu18.04-server/sgx_l
 ENV psw_deb https://download.01.org/intel-sgx/linux-2.5/ubuntu18.04-server/libsgx-enclave-common_2.5.101.50123-bionic1_amd64.deb
 ENV psw_dev_deb https://download.01.org/intel-sgx/linux-2.5/ubuntu18.04-server/libsgx-enclave-common-dev_2.5.101.50123-bionic1_amd64.deb
 ENV psw_dbgsym_deb https://download.01.org/intel-sgx/linux-2.5/ubuntu18.04-server/libsgx-enclave-common-dbgsym_2.5.101.50123-bionic1_amd64.ddeb
-ENV substratee_node https://github.com/scs/substraTEE-node/archive/master.zip       # FIXME: update to M4
-ENV substratee_worker https://github.com/scs/substraTEE-worker/archive/master.zip   # FIXME: update to M4
+ENV substratee_node https://github.com/scs/substraTEE-node/archive/M4.zip
+ENV substratee_worker https://github.com/scs/substraTEE-worker/archive/M4.zip
 ENV rust_toolchain nightly
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TERM xterm
@@ -99,12 +99,12 @@ RUN /root/.cargo/bin/rustup install nightly-2019-05-21 && \
 # init the rust environment
 RUN source /opt/sgxsdk/environment && \
     source /root/.cargo/env && \
-    /substraTEE/substraTEE-node-master/scripts/init.sh
+    /substraTEE/substraTEE-node-M4/scripts/init.sh
 
 # build the substraTEE-node
 RUN source /opt/sgxsdk/environment && \
     source /root/.cargo/env && \
-    cd /substraTEE/substraTEE-node-master && \
+    cd /substraTEE/substraTEE-node-M4 && \
     ./scripts/build.sh && \
     cargo build --release
 
@@ -114,7 +114,7 @@ RUN source /opt/sgxsdk/environment && \
     source /root/.cargo/env && \
     /root/.cargo/bin/rustup default nightly && \
     /root/.cargo/bin/rustup target add wasm32-unknown-unknown && \
-    cd /substraTEE/substraTEE-worker-master && \
+    cd /substraTEE/substraTEE-worker-M4 && \
     /root/.cargo/bin/rustup override set nightly-2019-05-22 && \
     make
 
@@ -122,7 +122,7 @@ RUN source /opt/sgxsdk/environment && \
 COPY scriptsM4/* /substraTEE/
 
 # copy the certificates for the RA
-COPY intel_cert/* /substraTEE/substraTEE-worker-master/bin/
+COPY intel_cert/* /substraTEE/substraTEE-worker-M4/bin/
 
 # install ipfs
 RUN mkdir /ipfs && \
