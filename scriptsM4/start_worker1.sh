@@ -3,8 +3,8 @@
 clear
 
 # configure and start the ipfs daemon
+ipfs init
 ipfs config Addresses.Gateway /ip4/0.0.0.0/tcp/8080
-ipfs init --profile server
 ipfs daemon > /substraTEE/output/ipfs_daemon1.log &
 
 # allow the node to get ready
