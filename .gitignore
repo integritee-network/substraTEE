@@ -2,3 +2,5 @@ intel_cert/key.txt
 intel_cert/spid.txt
 
 rust-sgx-sdk/*
+
+output/*.log
