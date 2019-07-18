@@ -1,0 +1,1 @@
+Put the required files (`key.txt` and `spid.txt`) for accessing the Intel Software Guard Extension Attestion in this folder.
