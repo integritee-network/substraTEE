@@ -34,10 +34,10 @@ then
     tmux set -g status-left-length 50
 
     # color the panes
-    tmux select-pane -t 1 -P 'fg=colour073,bg=colour236' # node
-    tmux select-pane -t 2 -P 'fg=colour011,bg=colour236' # client
-    tmux select-pane -t 3 -P 'fg=colour043,bg=colour236' # worker 1
-    tmux select-pane -t 4 -P 'fg=colour083,bg=colour236' # worker 2
+    tmux select-pane -t 1 -P 'fg=colour073' # node
+    tmux select-pane -t 2 -P 'fg=colour011' # client
+    tmux select-pane -t 3 -P 'fg=colour043' # worker 1
+    tmux select-pane -t 4 -P 'fg=colour083' # worker 2
 
 
     # start the substratee-node in pane 1
