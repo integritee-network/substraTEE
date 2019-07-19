@@ -354,7 +354,7 @@ The script performs the following steps:
 ![Diagram](./substraTEE-M4.png)
 
 #### Flow of the demo
-- The **substraTEE-node** is started immediately (T0) in development mode and begins to generate blocks.
+- The **substraTEE-node** is started immediately in development mode and begins to generate blocks.
 - The **substraTEE-worker 1** is started 3 seconds after the substraTEE-node and registers it's enclave at the substraTEE-node.
 - The **substraTEE-client** is started 30 seconds after the substraTEE-node and performs a first transaction. As only one worker is registered, the substraTEE-worker 1 performs the state transition function.
 - The **substraTEE-worker 2** is started 60 seconds after the substraTEE-node and registers it's enclave at the substraTEE-node. It detects that another enclave is already registered, performs a mutual remote attestation (MU-RA), exchanges the state encryption key and the encrypted state (over IPFS). At this point, two enclaves are registerd in the substraTEE-node.
