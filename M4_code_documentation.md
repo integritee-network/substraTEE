@@ -76,17 +76,16 @@ Same principle as Function 1 but starting at line 164 in the [worker/src/enclave
 
 ## substraTEE-client
 The client is a sample implementation and only serves the purpose to demonstrate the functionalities of the substraTEE-node and substraTEE–worker. It implements the following sequence:
- - [client/src/main.rs:73](https://github.com/scs/substraTEE-worker/blob/M4/client/src/main.rs#L73): The length of the provided argument `sha256wasm` is checked
- - [client/src/main.rs:88](https://github.com/scs/substraTEE-worker/blob/M4/client/src/main.rs#L88): The free balance from //Alice is queried
- - [client/src/main.rs:91](https://github.com/scs/substraTEE-worker/blob/M4/client/src/main.rs#L91): The current account nonce of //Alice is queried
- - [client/src/main.rs:94](https://github.com/scs/substraTEE-worker/blob/M4/client/src/main.rs#L94): The account //Alice is funded with 1_000_000
- - [client/src/main.rs:99](https://github.com/scs/substraTEE-worker/blob/M4/client/src/main.rs#L99): 1000 units are transferred from //Alice to the account of the TEE (identified by the public ED25519 key of the enclave)
- - [client/src/main.rs:73](https://github.com/scs/substraTEE-worker/blob/M4/client/src/main.rs#L73): An extrinsic with an encrypted payload (using the public RSA3072 key of the enclave) is composed
-     - The payload contains the account (default `//Alice`), the increment (default `42`) and the SHA256 hash of the WASM provided by the user
- - [client/src/main.rs:116](https://github.com/scs/substraTEE-worker/blob/M4/client/src/main.rs#L116): The extrinsic is sent to the substraTEE-node to the function “call_worker” of the substratee-proxy module. The client waits for the confirmation that the transaction got finalized
- - [client/src/main.rs:123](https://github.com/scs/substraTEE-worker/blob/M4/client/src/main.rs#L123): Use the substrate-api-client to subscribe to the event `CallConfirmed` of the substraTEE-node
- - [client/src/main.rs:125](https://github.com/scs/substraTEE-worker/blob/M4/client/src/main.rs#L125): When the event was received, print out the calculated and the received hash of the (unencrypted) payload
-
-
-
-
+- [client/src/main.rs:70](https://github.com/scs/substraTEE-worker/blob/M4/client/src/main.rs#L70): The number of registered enclaves (or substraTEE-workers) is queried from the substraTEE-node
+  - If (at least) one enclave is registered, the public key and the URL of the first substraTEE-worker is extracted
+- [client/src/main.rs:97](https://github.com/scs/substraTEE-worker/blob/M4/client/src/main.rs#L97): The SHA256 hash of the WASM file is calculated. This is either the same file as the enclave is using or the user can specify a custom file.
+- [client/src/main.rs:105](https://github.com/scs/substraTEE-worker/blob/M4/client/src/main.rs#L105): The free balance from //Alice is queried
+- [client/src/main.rs:108](https://github.com/scs/substraTEE-worker/blob/M4/client/src/main.rs#L108): The current account nonce of //Alice is queried
+- [client/src/main.rs:111](https://github.com/scs/substraTEE-worker/blob/M4/client/src/main.rs#L111): The account //Alice is funded with 1_000_000 units
+- [client/src/main.rs:115](https://github.com/scs/substraTEE-worker/blob/M4/client/src/main.rs#L115): 1000 units are transferred from //Alice to the account of the enclave (identified by the public ED25519 key of the enclave)
+- [client/src/main.rs:119](https://github.com/scs/substraTEE-worker/blob/M4/client/src/main.rs#L119): The public RSA3072 key of the enclave is requested from the substraTEE-worker
+- [client/src/main.rs:131](https://github.com/scs/substraTEE-worker/blob/M4/client/src/main.rs#L131): An extrinsic with an encrypted payload (using the public RSA3072 key of the enclave) is composed
+  - The payload contains the account (default `//Alice`), the increment (default `42`) and the SHA256 hash of the WASM
+- [client/src/main.rs:136](https://github.com/scs/substraTEE-worker/blob/M4/client/src/main.rs#L136): The extrinsic is sent to the substraTEE-node to the function “call_worker” of the substratee-registry module. The client waits for the confirmation that the transaction got finalized
+- [client/src/main.rs:143](https://github.com/scs/substraTEE-worker/blob/M4/client/src/main.rs#L143): Use the substrate-api-client to subscribe to the event `CallConfirmed` of the substraTEE-node
+- [client/src/main.rs:145](https://github.com/scs/substraTEE-worker/blob/M4/client/src/main.rs#L145): When the event was received, print out the calculated and the received hash of the (unencrypted) payload
