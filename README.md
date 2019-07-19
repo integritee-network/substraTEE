@@ -361,7 +361,7 @@ The script performs the following steps:
 - The **substraTEE-client** performs another transaction 30 seconds after the first. There are now two enclaves registered and both react on the transaction and calculate the new state.
 - The **substraTEE-client** queries finally the counter from one of the workers which verifies the signature.
 
-The local directory `./output` contains the outputs of the different components.
+After the demo has run, the local directory `./output` contains the outputs of the different components.
 
 ## Acknowledgements
 
