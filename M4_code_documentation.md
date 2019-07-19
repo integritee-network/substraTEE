@@ -26,53 +26,83 @@ This page describes the implemented functions of M4 with corresponding code refe
 
 ## substraTEE-worker
 ### Description of the functionality
-The substraTEE-worker implements three main functions:
+The substraTEE-worker implements mainly the following functions:
 1. Instruct the enclave to generate a RSA3072 key pair which is used for encrypting the payload sent from the substraTEE-client to the substraTEE-worker. This is done with the command `getpublickey`.
    - **Important**: only the public key leaves the enclave while the private key stays in the enclave.
+
 2. Instruct the enclave to generate a ED25519 key pair which is used for signing the extrinsic sent from the substraTEE-worker to the substraTEE-node. This is done with the command `getsignkey`.
     - **Important**: only the public key leaves the enclave while the private key stays in the enclave.
-3. Subscribe to substraTEE-proxy events, forward any received payload to the enclave and send the extrinsic (that is composed in the enclave) back to the substraTEE-node. This is done with the command `worker`.
 
-For M4, the substraTEE-worker compares the SHA256 hash of the WASM to be executed to the SHA256 hash given by the substraTEE-client. The code is executed only if the two hashes match - this gives the end user the confirmation and trust that the correct STF is executed.
+**With the `worker` command the following functions are executed in subsequent order:**
+
+3. Get a remote attestation report from Intel and send the report as an extrinsic (computed in the enclave) to the substraTEE-registry that checks validity of the report and adds the worker to the set of registered workers.
+
+4. Upon successful registration it checks in the substraTEE-registry if more workers are registered. If yes, it performs mutual remote attestation with the first registered worker and fetches afterwards the RSA3072 key, the state encryption key and the state with a TLS connection.
+
+5. Subscribe to substraTEE-registry events, forward any received payload to the enclave and send a confirmation as an extrinsic (that is composed in the enclave) back to the substraTEE-node. All registered workers now compute redundantly the state updates. This part remains almost unchanged since M2.
+
+Since M2, the substraTEE-worker compares the SHA256 hash of the WASM to be executed to the SHA256 hash given by the substraTEE-client. The code is executed only if the two hashes match - this gives the end user the confirmation and trust that the correct STF is executed.
 
 ### Implementation
 The functions are implemented at the following places:
 
-**Important**: Only the functions defined in [enclave/Enclave.edl](https://github.com/scs/substraTEE-worker/blob/M4/enclave/Enclave.edl) are allowed to be called in the enclave. The return values also have to be defined here.
+**Important**: The functions defined in the [enclave/Enclave.edl](https://github.com/scs/substraTEE-worker/blob/M4/enclave/Enclave.edl) are the only entry points from the untrusted world to the trusted world inside the enclave. All arguments and return values need to be defined there.
 
 #### Funtion 1: RSA3072 key pair generation
-- [worker/src/enclave_wrappers.rs:216](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/enclave_wrappers.rs#L216): The enclave is started
-- [worker/src/enclave_wrappers.rs:235](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/enclave_wrappers.rs#L235): The public RSA3072 key is requested from the enclave
-  - [enclave/src/lib.rs:96](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/lib.rs#L96): Enter the function `get_rsa_encryption_pubkey`
-  - [enclave/src/lib.rs:99](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/lib.rs#L99): The enclave checks if a key pair file (`./bin/rsa3072_key_sealed.bin`) is already present and if not, create a new one
-  - [enclave/src/lib.rs:109](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/lib.rs#L109): Read the key pair file and extract the public key
-  - [enclave/src/lib.rs:125](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/lib.rs#L125): Return the public key
-- [worker/src/enclave_wrappers.rs:257](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/enclave_wrappers.rs#L257): The received public RSA3072 key is written to an unencrypted text file (./bin/rsa_pubkey.txt)
+- [worker/src/enclave_wrappers.rs:215](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/enclave_wrappers.rs#L215): The enclave is started
+- [worker/src/enclave_wrappers.rs:234](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/enclave_wrappers.rs#L234): The public RSA3072 key is requested from the enclave
+  - [enclave/src/lib.rs:101](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/lib.rs#L101): Enter the function `get_rsa_encryption_pubkey`
+  - [enclave/src/lib.rs:107](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/lib.rs#L107): The enclave checks if a key pair file (`./bin/rsa3072_key_sealed.bin`) is already present and if not, create a new one
+  - [enclave/src/lib.rs:114](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/lib.rs#L114): Read the key pair file and extract the public key
+  - [enclave/src/lib.rs:127](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/lib.rs#L127): Return the public key
+- [worker/src/enclave_wrappers.rs:255](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/enclave_wrappers.rs#L255): The received public RSA3072 key is written to an unencrypted text file (./bin/rsa_pubkey.txt)
 
 #### Function 2: ED25519 key pair generation
-Same principle as Function 1 but starting at line 164 in the [worker/src/enclave_wrappers.rs]((https://github.com/scs/substraTEE-worker/blob/M4/worker/src/enclave_wrappers.rs#L164)
+Same principle as Function 1 but starting at line 163 in the [worker/src/enclave_wrappers.rs](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/enclave_wrappers.rs#L163)
 
-#### Function 3: Process encrypted payload from the substraTEE-node
+#### Function 3: Perform remote attestation
+- [worker/src/main.rs:152](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/main.rs#L152): The enclave is started
+- [worker/src/main.rs:166](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/main.rs#L166): The worker initializes the SGXWASM specific driver engine in the previously created enclave
+- [worker/src/main.rs:185](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/main.rs#L185): The worker spawns a server for mutual remote attestation requests.
+- [worker/src/main.rs:191](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/main.rs#L191): The worker calls the substrate-api-client and collects all the necessary information such that the TEE can compose a valid extrinsic.
+- [worker/src/main.rs:217](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/main.rs#L217): Enter the enclave via the `perform_ra`.
+  - [enclave/src/attestation.rs:585](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/attestation.rs#L585): Create the attestation report with signature from Intel. The steps to create the attestation report are quite technical. Hence, details are omitted here, but the code follows the exact steps from [ATTESTATION.md](https://github.com/scs/substraTEE/blob/master/ATTESTATION.md#attestation-registry-on-chain).
+  - [enclave/src/attestation.rs:590](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/attestation.rs#L590): Compose the extrinsic to register the enclave and return it.
+- [worker/src/main.rs:247](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/main.rs#L247): Send the extrinsic to the node and wait until its finalized.
 
-- [worker/src/main.rs:100](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/main.rs#L100): The enclave is started
-- [worker/src/main.rs:116](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/main.rs#L116): The worker initializes the SGXWASM specific driver engine in the previously created enclave
-- [worker/src/main.rs:132](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/main.rs#L132): The worker calls the substrate-api-client and subscribes to events from the substraTEE-node
-- [worker/src/main.rs:157](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/main.rs#L157): When it receives a Balances event, it prints out the decoded information
-- [worker/src/main.rs:172](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/main.rs#L172): When it receives a substraTEE-proxy event, it forwards the received (encrypted) payload to the function `process_forwarded_payload`
-  - [worker/src/enclave_wrappers.rs:64](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/enclave_wrappers.rs#L64): The (encrypted) payload is forwarded to the function `decrypt_and_process_payload`
-    - [worker/src/enclave_wrappers.rs:108](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/enclave_wrappers.rs#L108): The WASM code is read from the file `bin/worker_enclave.compact.wasm`
-    - [worker/src/enclave_wrappers.rs:111](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/enclave_wrappers.rs#L111): The SHA256 hash of the WASM code is calculated
-    - [worker/src/enclave_wrappers.rs:127](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/enclave_wrappers.rs#L127): The (encrypted) payload, the calcuated SHA256 hash and additional information to compose a valid extrinsic is given to the function `call_counter_wasm` in the enclave
-      - [enclave/src/lib.rs:224](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/lib.rs#L224): The payload is decoded using the RSA3072 private key of the enclave
-      - [enclave/src/lib.rs:226](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/lib.rs#L226): The account, the increment and the expected SHA256 hash are read from the decrypted payload
-      - [enclave/src/lib.rs:242](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/lib.rs#L242): The calculated and the expected SHA256 hashes are compared. If they don't match, the enclave returns an error
-      - [enclave/src/lib.rs:255](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/lib.rs#L255): If the hashes match, the current value of the desired account's counter is read from the sealed file
-      - [enclave/src/lib.rs:285](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/lib.rs#L285): The arguments for the WASM are prepared (old value and increment)
-      - [enclave/src/lib.rs:290](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/lib.rs#L290): The WASM code is executed
-      - [enclave/src/lib.rs:296](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/lib.rs#L296): If the execution was successful, the updated value is written back to the account's counter
-      - [enclave/src/lib.rs:310](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/lib.rs#L310): The updated counter is written back to the disk, as sealed file
-      - [enclave/src/lib.rs:319](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/lib.rs#L319): The enclave composes the extrinsic with the hash of the (unencrypted) payload that is returned to the worker. The target module is the function `confirm_call` of the substraTEE-proxy
-  - [worker/src/enclave_wrappers.rs:74](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/enclave_wrappers.rs#L74): The extrinsic is sent through the substrate-api-client to the substraTEE-node
+#### Function 4: Mutual Remote Attestation
+- [worker/src/main.rs:251](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/main.rs#L251): Query the node for the amount of registered workers.
+- [worker/src/main.rs:261](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/main.rs#L261): If other workers are registered. Get a worker's information from the node in order to connect to it via a websocket.
+- [worker/src/main.rs:265](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/main.rs#L265): Query the other worker for the port it has running the mutual remote attestation server.
+- [worker/src/main.rs:269](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/main.rs#L269): Perform a mutual remote attestation with the other worker.
+  - [worker/src/enclave_tls_ra.rs](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/enclave_tls_ra.rs#L91): Setup a TCP connection and hand the socket into the enclave to perform the mutual remote attestation.
+    - [enclave/src/tls_ra.rs](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/tls_ra.rs)
+      - Server ([line #94](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/tls_ra.rs#L94)) and client ([line #161](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/tls_ra.rs#L161)) both get a remote attestation report from Intel.
+      - A TLS session is established. The `rustls` Server ([line #62](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/tls_ra.rs#L62)) and client ([line #26](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/tls_ra.rs#L26)) authentication procedure has been extended to automatically check the remote attestation report upon session establishment.
+      - [MU-RA Server] Reads the keys from storage and  sends them via TLS ([line #112](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/tls_ra.rs#L112))
+      - [MU-RA Server] Writes the encrypted state to an IPFS node through a call to the host system ([line #141](https://github.com/scs/substraTEE-worker/blob/5190921c0c0950b974f5501442c9cca6c917157b/enclave/src/tls_ra.rs#L141)), which returns a CID (= a hash corresponding to an IPFS address).
+      - [MU-RA Server] Sends the CID to the client ([line #152](https://github.com/scs/substraTEE-worker/blob/5190921c0c0950b974f5501442c9cca6c917157b/enclave/src/tls_ra.rs#L152)).
+      - [MU-RA Client] Reads the keys and the CID ([line 183](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/tls_ra.rs#L183)).
+      - [MU-RA Client] Reads the encrypted state from the IPFS node through a call to the host system ([line 265](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/tls_ra.rs#L265)).
+
+#### Function 5: Process encrypted payload from the substraTEE-node
+- [worker/src/main.rs:277](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/main.rs#L277): The worker calls the substrate-api-client and subscribes to events from the substraTEE-node
+- [worker/src/main.rs:299](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/main.rs#L299): When it receives a Balances event, it prints out the decoded information
+- [worker/src/main.rs:325](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/main.rs#L315): When it receives a substraTEE-registry `Forwarded` event, it forwards the received (encrypted) payload to the function `process_forwarded_payload`. Other substraTEE-registry events are simply printed.
+  - [worker/src/enclave_wrappers.rs:53](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/enclave_wrappers.rs#L53): The (encrypted) payload is forwarded to the function `decrypt_and_process_payload`
+    - [worker/src/enclave_wrappers.rs:106](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/enclave_wrappers.rs#L108): The WASM code is read from the file `bin/worker_enclave.compact.wasm`
+    - [worker/src/enclave_wrappers.rs:109](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/enclave_wrappers.rs#L109): The SHA256 hash of the WASM code is calculated
+    - [worker/src/enclave_wrappers.rs:125](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/enclave_wrappers.rs#L125): The (encrypted) payload, the calculated SHA256 hash and additional information to compose a valid extrinsic is given to the function `call_counter_wasm` in the enclave
+      - [enclave/src/lib.rs:206](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/lib.rs#L206): The payload is decoded using the RSA3072 private key of the enclave
+      - [enclave/src/lib.rs:208](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/lib.rs#L208): The account, the increment and the expected SHA256 hash are read from the decrypted payload
+      - [enclave/src/lib.rs:219](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/lib.rs#L219): The calculated and the expected SHA256 hashes are compared. If they don't match, the enclave returns an error
+      - [enclave/src/lib.rs:223](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/lib.rs#L223): If the hashes match, the encrypted state it read from file and decrypted
+      - [enclave/src/lib.rs:245](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/lib.rs#L245): The wasm action is invoked, which performs the state update
+      - [enclave/src/lib.rs:250](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/lib.rs#L250): The updated counter state is encrypted
+      - [enclave/src/lib.rs:257](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/lib.rs#L257): The hash of the encrypted state is calculated, which is later written to the substraTEE-registry
+      - [enclave/src/lib.rs:259](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/lib.rs#L259): The updated encrypted state is written back to the disk
+      - [enclave/src/lib.rs:273](https://github.com/scs/substraTEE-worker/blob/M4/enclave/src/lib.rs#L273): The enclave composes the extrinsic with the hash of the (unencrypted) payload that is returned to the worker. The target module is the function `confirm_call` of the substraTEE-registry
+  - [worker/src/enclave_wrappers.rs:74](https://github.com/scs/substraTEE-worker/blob/M4/worker/src/enclave_wrappers.rs#L74): The extrinsic is sent to the substraTEE-node through the substrate-api-client
 
 ## substraTEE-client
 The client is a sample implementation and only serves the purpose to demonstrate the functionalities of the substraTEE-node and substraTEE–worker. It implements the following sequence:
