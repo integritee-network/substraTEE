@@ -312,7 +312,7 @@ Whenever you perform the steps 8. and 9., you will see the counter incrementing.
 
 ### M4 Redundancy and Secret Provisioning
 The M4 demo differs from the proposed architecture in the following points:
-- There is only one docker image that contains the substraTEE-node, the substraTEE-worker and the substraTEE-client (named _substatee_)
+- There is only one docker image that contains the substraTEE-node, the substraTEE-worker and the substraTEE-client (named _substratee_)
 - There will be 4 docker containers running the following components:
   - Docker container 1: substraTEE-node
   - Docker container 2: substraTEE-client
