@@ -372,7 +372,7 @@ After the demo has run, the local directory `./output` contains the log files of
 
 ## Acknowledgements
 
-The development of substraTEE is financed by [web3 foundation](https://web3.foundation/)'s grant programme.
+The development of substraTEE is partly financed by [web3 foundation](https://web3.foundation/)'s grant programme.
 
 We also thank the teams at
 
