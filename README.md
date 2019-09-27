@@ -31,12 +31,13 @@ An overview over security aspects can be found in [SECURITY](./SECURITY.md). Rem
 
 |    Milestone    	|    Request    Invocation    	|    STF                      	|    # Workers per STF    	|    On-chain tx per invocation    	|    Supported TEE Manufact.                   	|  Remote Attestation Registry  |
 |-----------------	|-----------------------------	|-----------------------------	|-------------------------	|----------------------------------	|----------------------------------------------	| ---|
-|    M1           	|    Proxy                    	|    Rust                     	|    1                    	|    2                             	|    Intel                                     	|   -  |
-|    M2           	|    Proxy                    	|    Rust or WASM             	|    1                    	|    2                             	|    Intel                                     	|  -  |
-|    M3           	|    Proxy                    	|    Rust or WASM             	|    1                    	|    2                             	|    Intel                                     	|  X  |
-|    M4           	|    Proxy                    	|    Rust or WASM             	|    N (redundant)        	|    1+N                           	|    Intel                                     	|  X  |
-|    future       	|    Proxy                    	|    Rust or WASM or   **Ink**	|    N (redundant)        	|    2                             	|    Intel + ARM TrustZone + Keystone   (?)    	|  X  |
-|    future        |    **Direct**               	|    Rust or WASM or   **Ink**	|    N (master + failover)    	|    **<< 1**                	|    Intel + ARM TrustZone + Keystone   (?)    	|  X  |
+|    M1 &#9745;          	|    Proxy                    	|    Rust                     	|    1                    	|    2                             	|    Intel                                     	|   -  |
+|    M2 &#9745;          	|    Proxy                    	|    Rust or WASM             	|    1                    	|    2                             	|    Intel                                     	|  -  |
+|    M3 &#9745;          	|    Proxy                    	|    Rust or WASM             	|    1                    	|    2                             	|    Intel                                     	|  X  |
+|    M4 &#9745;          	|    Proxy                    	|    Rust or WASM             	|    N (redundant)        	|    1+N                           	|    Intel                                     	|  X  |
+|    M5 &#9745;          	|    Proxy                    	|    Rust modular           	|    N (redundant)        	|    1+N                           	|    Intel                                     	|  X  |
+|    future &#9744;      	|    Proxy                    	|    Rust or **Ink**	|    N (redundant)        	|    2                             	|    Intel + ARM TrustZone + Keystone   (?)    	|  X  |
+|    future &#9744;       |    **Direct**               	|    Rust or **Ink**	|    N (master + failover)    	|    **<< 1**                	|    Intel + ARM TrustZone + Keystone   (?)    	|  X  |
 
 
 ### M1 PoC1: single-TEE confidential state transition function
@@ -57,6 +58,9 @@ substraTEE-worker can remote-attest its own enclave with Intel Attestation Servi
 
 Several substraTEE-workers running on different machines can redundantly operate on the same STF. This guarantees that the STF survives the loss of a few SGX machines (going offline, breaking down, denial-of-service). Moreover, this improves integrity guarantees as all the workers register call receipts including the hash of the new state. A single compromised enclave can therefore only break confidentiality, but not integrity, as manipulation would be evident to anyone. 
 Secret sharing among a dynamic set of worker enclaves must be implemented for such redundancy.
+
+### M5 Modular STF with private-tx example
+Since M5, the STF is modular and has its own crate which can easily be swapped. An example for private transactions has been added
 
 ### *FUTURE*
 
