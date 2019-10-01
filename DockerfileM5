@@ -87,7 +87,9 @@ RUN mkdir /substraTEE && \
     wget -O /substraTEE/substraTEE-worker.zip ${substratee_worker} && \
     cd /substraTEE && \
     unzip substraTEE-node.zip && \
+    mv substraTEE-node-brenzi-private-tx substraTEE-node && \
     unzip substraTEE-worker.zip && \
+    mv substraTEE-worker-brenzi-private-tx substraTEE-worker && \
     rm substraTEE-*.zip
 
 # install the needed nightly version of rust and the wasm32 for the default toolchain
@@ -99,12 +101,12 @@ RUN /root/.cargo/bin/rustup install nightly-2019-08-01 && \
 # init the rust environment
 RUN source /opt/sgxsdk/environment && \
     source /root/.cargo/env && \
-    /substraTEE/substraTEE-node-brenzi-private-tx/scripts/init.sh
+    /substraTEE/substraTEE-node/scripts/init.sh
 
 # build the substraTEE-node
 RUN source /opt/sgxsdk/environment && \
     source /root/.cargo/env && \
-    cd /substraTEE/substraTEE-node-brenzi-private-tx && \
+    cd /substraTEE/substraTEE-node && \
     cargo build --release
 
 # build the substraTEE-worker
@@ -113,15 +115,15 @@ RUN source /opt/sgxsdk/environment && \
     source /root/.cargo/env && \
     /root/.cargo/bin/rustup default nightly && \
     /root/.cargo/bin/rustup target add wasm32-unknown-unknown && \
-    cd /substraTEE/substraTEE-worker-brenzi-private-tx && \
+    cd /substraTEE/substraTEE-worker && \
     /root/.cargo/bin/rustup override set nightly-2019-08-01 && \
     make
 
 # copy the shell scripts to the docker to launch to node and the workers
-COPY scriptsM4/* /substraTEE/
+COPY scriptsM5/* /substraTEE/
 
 # copy the certificates for the RA
-COPY intel_cert/* /substraTEE/substraTEE-worker-brenzi-private-tx/bin/
+COPY intel_cert/* /substraTEE/substraTEE-worker/bin/
 
 # install ipfs
 RUN mkdir /ipfs && \

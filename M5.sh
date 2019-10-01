@@ -14,12 +14,12 @@ docker network create --subnet 192.168.10.0/24 substratee-net
 mkdir -p output
 
 # start the tmux session
-SESSION=substraTEEM4Demo
+SESSION=substraTEEM5Demo
 tmux has-session -t $SESSION
 
 if [ $? != 0 ]
 then
-    tmux -2 new -d -s $SESSION -n "substraTEE M4 Demo"
+    tmux -2 new -d -s $SESSION -n "substraTEE M5 Demo"
 
     # create a window split by 4
     tmux split-window -v
