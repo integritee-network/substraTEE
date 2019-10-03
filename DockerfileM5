@@ -37,8 +37,8 @@ ENV sdk_bin https://download.01.org/intel-sgx/linux-2.5/ubuntu18.04-server/sgx_l
 ENV psw_deb https://download.01.org/intel-sgx/linux-2.5/ubuntu18.04-server/libsgx-enclave-common_2.5.101.50123-bionic1_amd64.deb
 ENV psw_dev_deb https://download.01.org/intel-sgx/linux-2.5/ubuntu18.04-server/libsgx-enclave-common-dev_2.5.101.50123-bionic1_amd64.deb
 ENV psw_dbgsym_deb https://download.01.org/intel-sgx/linux-2.5/ubuntu18.04-server/libsgx-enclave-common-dbgsym_2.5.101.50123-bionic1_amd64.ddeb
-ENV substratee_node https://github.com/scs/substraTEE-node/archive/brenzi-private-tx.zip
-ENV substratee_worker https://github.com/scs/substraTEE-worker/archive/brenzi-private-tx.zip
+ENV substratee_node https://github.com/scs/substraTEE-node/archive/M5.zip
+ENV substratee_worker https://github.com/scs/substraTEE-worker/archive/M5.zip
 ENV rust_toolchain nightly
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TERM xterm
@@ -87,9 +87,9 @@ RUN mkdir /substraTEE && \
     wget -O /substraTEE/substraTEE-worker.zip ${substratee_worker} && \
     cd /substraTEE && \
     unzip substraTEE-node.zip && \
-    mv substraTEE-node-brenzi-private-tx substraTEE-node && \
+    mv substraTEE-node-M5 substraTEE-node && \
     unzip substraTEE-worker.zip && \
-    mv substraTEE-worker-brenzi-private-tx substraTEE-worker && \
+    mv substraTEE-worker-M5 substraTEE-worker && \
     rm substraTEE-*.zip
 
 # install the needed nightly version of rust and the wasm32 for the default toolchain
