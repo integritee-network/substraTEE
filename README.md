@@ -1,7 +1,4 @@
 # substraTEE
-
-[substrate](https://docs.substrate.dev/) runtime in Trusted Execution Environment
-
 *substraTEE* is an extension to [Parity Substrate](https://docs.substrate.dev/), allowing to call a custom state transition function (STF) inside a Trusted Execution Environment (TEE), namely an Intel SGX enclave thereby providing confidentiality and integrity. The enclaves operate on an encrypted state which can be read and written only by a set of provisioned and remote-attested enclaves.
 *substraTEE* enables use cases demanding transaction privacy as well as atomic cross-chain transfers (bridges).
 
@@ -29,15 +26,16 @@ An overview over security aspects can be found in [SECURITY](./SECURITY.md). Rem
 
 ## Roadmap
 
-|    Milestone    	|    Request    Invocation    	|    STF                      	|    # Workers per STF    	|    On-chain tx per invocation    	|    Supported TEE Manufact.                   	|  Remote Attestation Registry  |
-|-----------------	|-----------------------------	|-----------------------------	|-------------------------	|----------------------------------	|----------------------------------------------	| ---|
-|    M1 &#9745;          	|    Proxy                    	|    Rust                     	|    1                    	|    2                             	|    Intel                                     	|   -  |
-|    M2 &#9745;          	|    Proxy                    	|    Rust or WASM             	|    1                    	|    2                             	|    Intel                                     	|  -  |
-|    M3 &#9745;          	|    Proxy                    	|    Rust or WASM             	|    1                    	|    2                             	|    Intel                                     	|  X  |
-|    M4 &#9745;          	|    Proxy                    	|    Rust or WASM             	|    N (redundant)        	|    1+N                           	|    Intel                                     	|  X  |
-|    M5 &#9745;          	|    Proxy                    	|    Rust modular           	|    N (redundant)        	|    1+N                           	|    Intel                                     	|  X  |
-|    future &#9744;      	|    Proxy                    	|    Rust or **Ink**	|    N (redundant)        	|    2                             	|    Intel + ARM TrustZone + Keystone   (?)    	|  X  |
-|    future &#9744;       |    **Direct**               	|    Rust or **Ink**	|    N (master + failover)    	|    **<< 1**                	|    Intel + ARM TrustZone + Keystone   (?)    	|  X  |
+|    Milestone    	|    Request    Invocation    	|    STF                      	|    # Workers per STF    	|    On-chain tx per invocation    	|    read chain state from STF  | Supported TEE Manufact.                   	|  Remote Attestation Registry  |
+|-----------------	|-----------------------------	|-----------------------------	|-------------------------	|----------------------------------	|----------------------------------------------	| ---|---|
+|    M1 &#9745;          	|    Proxy                    	|    Rust                     	|    1                    	|    2                             	|   - 	|    Intel                                     	|   -  |
+|    M2 &#9745;          	|    Proxy                    	|    Rust or WASM             	|    1                    	|    2                             	|   - 	|    Intel                                     	|  -  |
+|    M3 &#9745;          	|    Proxy                    	|    Rust or WASM             	|    1                    	|    2                             	|   - 	|    Intel                                     	|  X  |
+|    M4 &#9745;          	|    Proxy                    	|    Rust or WASM             	|    N (redundant)        	|    1+N                           	|   - 	|    Intel                                     	|  X  |
+|    M5 &#9745;          	|    Proxy                    	|    Rust modular           	|    N (redundant)        	|    1+N                           	|   - 	|    Intel                                     	|  X  |
+|    M6 &#9744;          	|    Proxy                    	|    Rust modular           	|    N (redundant)        	|    1+N                           	|   X 	|    Intel                                     	|  X  |
+|    future &#9744;      	|    Proxy                    	|    Rust or **Ink**	|    N (redundant)        	|    2                             	|   X 	|    Intel + ARM TrustZone + Keystone   (?)    	|  X  |
+|    future &#9744;       |    **Direct**               	|    Rust or **Ink**	|    N (master + failover)    	|    **<< 1**                	|   X 	|    Intel + ARM TrustZone + Keystone   (?)    	|  X  |
 
 
 ### M1 PoC1: single-TEE confidential state transition function
@@ -61,6 +59,9 @@ Secret sharing among a dynamic set of worker enclaves must be implemented for su
 
 ### M5 Modular STF with private-tx example
 Since M5, the STF is modular and has its own crate which can easily be swapped. An example for private transactions has been added
+
+### M6 read chain state from STF
+From M6 onwards, SubstraTEE STF can access chain state in a trustless way. A substrate light client verification logic will be included in the worker enclave that allows the STF to query chain state by means of subscribing to storage over RPC and verifying returned values within the enclave.
 
 ### *FUTURE*
 
