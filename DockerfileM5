@@ -31,15 +31,20 @@
 # Copyright 2019 Supercomputing Systems AG
 
 FROM ubuntu:18.04
-MAINTAINER Yu Ding
+LABEL MAINTAINER="Yu Ding"
 
+# Intel SGX files
 ENV sdk_bin https://download.01.org/intel-sgx/linux-2.5/ubuntu18.04-server/sgx_linux_x64_sdk_2.5.100.49891.bin
 ENV psw_deb https://download.01.org/intel-sgx/linux-2.5/ubuntu18.04-server/libsgx-enclave-common_2.5.101.50123-bionic1_amd64.deb
 ENV psw_dev_deb https://download.01.org/intel-sgx/linux-2.5/ubuntu18.04-server/libsgx-enclave-common-dev_2.5.101.50123-bionic1_amd64.deb
 ENV psw_dbgsym_deb https://download.01.org/intel-sgx/linux-2.5/ubuntu18.04-server/libsgx-enclave-common-dbgsym_2.5.101.50123-bionic1_amd64.ddeb
-ENV substratee_node https://github.com/scs/substraTEE-node/archive/M5.zip
-ENV substratee_worker https://github.com/scs/substraTEE-worker/archive/M5.zip
-ENV rust_toolchain nightly
+
+# substraTEE files
+ENV substratee_node_release M5.2
+ENV substratee_worker_release M5.2
+ENV substratee_node https://github.com/scs/substraTEE-node/archive/${substratee_node_release}.zip
+ENV substratee_worker https://github.com/scs/substraTEE-worker/archive/${substratee_worker_release}.zip
+
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TERM xterm
 
@@ -47,12 +52,13 @@ SHELL ["/bin/bash", "-c"]
 
 # prepare the linux system
 RUN apt-get update && \
-    apt-get install -y build-essential ocaml ocamlbuild automake autoconf \
+    apt-get install -y --no-install-recommends\
+    build-essential ocaml ocamlbuild automake autoconf \
     libtool wget python libssl-dev libcurl4-openssl-dev protobuf-compiler \
-    libprotobuf-dev sudo kmod vim curl git-core libprotobuf-c0-dev \
+    libprotobuf-dev kmod vim curl git-core libprotobuf-c0-dev \
     libboost-thread-dev libboost-system-dev liblog4cpp5-dev libjsoncpp-dev \
     alien uuid-dev libxml2-dev cmake pkg-config expect systemd-sysv gdb unzip \
-    clang libclang-dev rsync && \
+    clang libclang-dev rsync ca-certificates && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /var/cache/apt/archives/*
 
@@ -73,13 +79,17 @@ RUN mkdir /root/sgx && \
     rm -rf /root/sgx/*
 
 # installing rust-sgx-sdk
+ENV rust_toolchain nightly-2019-11-17
 RUN wget 'https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init' -O /root/rustup-init && \
     chmod +x /root/rustup-init && \
     echo '1' | /root/rustup-init --default-toolchain ${rust_toolchain} && \
     echo 'source /root/.cargo/env' >> /root/.bashrc && \
     /root/.cargo/bin/rustup component add rust-src && \
-    /root/.cargo/bin/cargo install xargo && \
+    HI=$(/root/.cargo/bin/rustup which rustc) && HI=${HI%/bin/rustc} && export TOOLCHAIN_DIR=$HI && echo TOOLCHAIN_DIR=$TOOLCHAIN_DIR && \
+    rm -rf $TOOLCHAIN_DIR/share/doc && \
+    rm -rf $TOOLCHAIN_DIR/share/man && \
     rm -rf /root/.cargo/registry && rm -rf /root/.cargo/git
+    # /root/.cargo/bin/cargo install xargo && \
 
 # downloading and extracting the substraTEE components
 RUN mkdir /substraTEE && \
@@ -87,43 +97,40 @@ RUN mkdir /substraTEE && \
     wget -O /substraTEE/substraTEE-worker.zip ${substratee_worker} && \
     cd /substraTEE && \
     unzip substraTEE-node.zip && \
-    mv substraTEE-node-M5 substraTEE-node && \
+    mv substraTEE-node-${substratee_node_release} substraTEE-node && \
     unzip substraTEE-worker.zip && \
-    mv substraTEE-worker-M5 substraTEE-worker && \
+    mv substraTEE-worker-${substratee_worker_release} substraTEE-worker && \
     rm substraTEE-*.zip
 
-# install the needed nightly version of rust and the wasm32 for the default toolchain
-# FIXME: synchronize and fix the used version (see below)
-RUN /root/.cargo/bin/rustup install nightly-2019-08-01 && \
-    /root/.cargo/bin/rustup default nightly-2019-08-01 && \
-    /root/.cargo/bin/rustup target add wasm32-unknown-unknown
-
 # init the rust environment
+ENV CI_PROJECT_NAME test
 RUN source /opt/sgxsdk/environment && \
     source /root/.cargo/env && \
     /substraTEE/substraTEE-node/scripts/init.sh
+
+RUN /root/.cargo/bin/rustup show
 
 # build the substraTEE-node
 RUN source /opt/sgxsdk/environment && \
     source /root/.cargo/env && \
     cd /substraTEE/substraTEE-node && \
-    cargo build --release
+    cargo build --release && \
+    rm -rf target/release/deps && \
+    rm -rf target/release/wbuild && \
+    rm -rf target/release/build && \
+    rm -rf target/release/wbuild-runner
 
 # build the substraTEE-worker
-# the substratee-worker (or more precisly, the rust-sgx-sdk compiles only with nightly-2019-08-01)
 RUN source /opt/sgxsdk/environment && \
     source /root/.cargo/env && \
-    /root/.cargo/bin/rustup default nightly && \
-    /root/.cargo/bin/rustup target add wasm32-unknown-unknown && \
     cd /substraTEE/substraTEE-worker && \
-    /root/.cargo/bin/rustup override set nightly-2019-08-01 && \
-    make
-
-# copy the shell scripts to the docker to launch to node and the workers
-COPY scriptsM5/* /substraTEE/
-
-# copy the certificates for the RA
-COPY intel_cert/* /substraTEE/substraTEE-worker/bin/
+    make && \
+    rm -rf target/release/deps && \
+    rm -rf target/release/wbuild && \
+    rm -rf target/release/build && \
+    rm -rf target/release/wbuild-runner && \
+    rm -rf enclave/target/release/deps && \
+    rm -rf enclave/target/release/build
 
 # install ipfs
 RUN mkdir /ipfs && \
@@ -132,5 +139,8 @@ RUN mkdir /ipfs && \
     tar xvfz go-ipfs.tar.gz && \
     cd go-ipfs && \
     ./install.sh
+
+# copy the shell scripts to the docker to launch to node and the workers
+COPY scriptsM5/* /substraTEE/
 
 WORKDIR /substraTEE
