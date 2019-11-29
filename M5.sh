@@ -60,7 +60,7 @@ then
         -v /var/run/aesmd:/var/run/aesmd \
         -v $(pwd)/intel_cert:/substraTEE/intel_cert \
         $DOCKER_IMAGE \
-        \"/substraTEE/start_worker1.sh\"" Enter
+        \"/substraTEE/start_worker.sh\"" Enter
 
     # start the substratee-client in pane 3
     tmux send-keys -t3 "docker run -ti \
