@@ -1,10 +1,16 @@
 #!/bin/bash
 
+# name of the docker image
+DOCKER_IMAGE=scssubstratee/substratee:M5.2
+
 # clone the rust-sgx-sdk (used to run the substratee-worker in the docker)
 git clone https://github.com/baidu/rust-sgx-sdk.git
 
-# prepare the docker image
-docker build -t substratee -f DockerfileM5 .
+# get the substraTEE docker image from docker hub
+docker pull $DOCKER_IMAGE
+
+# if you want to build the docker image yourself, use the following command:
+# docker build -t substratee -f DockerfileM5 .
 
 # prepare the docker specific network
 docker network rm substratee-net
@@ -21,10 +27,8 @@ if [ $? != 0 ]
 then
     tmux -2 new -d -s $SESSION -n "substraTEE M5 Demo"
 
-    # create a window split by 4
+    # create a window split by 3
     tmux split-window -v
-    tmux split-window -h
-    tmux select-pane -t 1 -T "pane 1"
     tmux split-window -h
 
     # enable pane titles
@@ -37,49 +41,33 @@ then
     tmux select-pane -t 1 -P 'fg=colour073' # node
     tmux select-pane -t 2 -P 'fg=colour011' # client
     tmux select-pane -t 3 -P 'fg=colour043' # worker 1
-    tmux select-pane -t 4 -P 'fg=colour083' # worker 2
-
 
     # start the substratee-node in pane 1
     tmux send-keys -t1 "docker run -ti \
         --ip=192.168.10.10 \
         --network=substratee-net \
         -v $(pwd)/output:/substraTEE/output \
-        -v /home/marcel/substraTEE-worker:/substraTEE/worker_local \
-        substratee \
+        $DOCKER_IMAGE \
         \"/substraTEE/start_node.sh\"" Enter
 
-    # start the substratee-worker 1 in pane 3
-    tmux send-keys -t3 "docker run -ti \
+    # start the substratee-worker in pane 2
+    tmux send-keys -t2 "docker run -ti \
         --ip=192.168.10.21 \
         --network=substratee-net \
         --device /dev/isgx \
         -v $(pwd)/output:/substraTEE/output \
         -v $(pwd)/rust-sgx-sdk:/root/sgx \
         -v /var/run/aesmd:/var/run/aesmd \
-        -v /home/marcel/substraTEE-worker:/substraTEE/worker_local \
-        substratee \
-        \"/substraTEE/start_worker1.sh\"" Enter
+        -v $(pwd)/intel_cert:/substraTEE/intel_cert \
+        $DOCKER_IMAGE \
+        \"/substraTEE/start_worker.sh\"" Enter
 
-    # start the substratee-worker 2 in pane 4
-    tmux send-keys -t4 "docker run -ti \
-        --ip=192.168.10.22 \
-        --network=substratee-net \
-        --device /dev/isgx \
-        -v $(pwd)/output:/substraTEE/output \
-        -v $(pwd)/rust-sgx-sdk:/root/sgx \
-        -v /var/run/aesmd:/var/run/aesmd \
-        -v /home/marcel/substraTEE-worker:/substraTEE/worker_local \
-        substratee \
-        \"/substraTEE/start_worker2.sh\"" Enter
-
-    # start the substratee-client in pane 2
-    tmux send-keys -t2 "docker run -ti \
+    # start the substratee-client in pane 3
+    tmux send-keys -t3 "docker run -ti \
         --ip=192.168.10.30 \
         --network=substratee-net \
         -v $(pwd)/output:/substraTEE/output \
-        -v /home/marcel/substraTEE-worker:/substraTEE/worker_local \
-        substratee \
+        $DOCKER_IMAGE \
         \"/substraTEE/start_client.sh\"" Enter
 fi
 

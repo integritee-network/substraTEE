@@ -1,6 +1,6 @@
 # substraTEE
 <p align="center">
-<img src=./substraTEE-logo-scs.svg width=200>
+<img src=./substraTEE-logo-scs.png width=200>
 </p>
 
 *substraTEE* is an extension to [Parity Substrate](https://docs.substrate.dev/), allowing to call a custom state transition function (STF) inside a Trusted Execution Environment (TEE), namely an Intel SGX enclave thereby providing confidentiality and integrity. The enclaves operate on an encrypted state which can be read and written only by a set of provisioned and remote-attested enclaves.
@@ -58,7 +58,7 @@ substraTEE-worker can remote-attest its own enclave with Intel Attestation Servi
 
 ### M4 Redundancy and Secret Provisioning
 
-Several substraTEE-workers running on different machines can redundantly operate on the same STF. This guarantees that the STF survives the loss of a few SGX machines (going offline, breaking down, denial-of-service). Moreover, this improves integrity guarantees as all the workers register call receipts including the hash of the new state. A single compromised enclave can therefore only break confidentiality, but not integrity, as manipulation would be evident to anyone. 
+Several substraTEE-workers running on different machines can redundantly operate on the same STF. This guarantees that the STF survives the loss of a few SGX machines (going offline, breaking down, denial-of-service). Moreover, this improves integrity guarantees as all the workers register call receipts including the hash of the new state. A single compromised enclave can therefore only break confidentiality, but not integrity, as manipulation would be evident to anyone.
 Secret sharing among a dynamic set of worker enclaves must be implemented for such redundancy.
 
 ### M5 Modular STF with private-tx example
@@ -94,7 +94,7 @@ The main building blocks can be found in the following repositories:
 * [substraTEE-worker](https://github.com/scs/substraTEE-worker): (client, worker-app, worker-enclave): A SGX-enabled service that performs a confidential state-transition-function
 
 ## Redundancy (M3-M5)
-The goal of redundancy is to allow multiple workers to operate on the same state to be resilient against outage of one or more workers. 
+The goal of redundancy is to allow multiple workers to operate on the same state to be resilient against outage of one or more workers.
 
 The high level architecture of the proposed architecture for M3 and M4 can be seen in the following diagram:
 ![Diagram](./substraTEE-architecture-M4.svg)
@@ -122,6 +122,8 @@ The exchange of critical information between the enclaves is performed over a se
 ## Demo
 
 This repo hosts docker files to showcase the milestones.
+
+We started with M5 to upload the docker images to [docker hub](https://hub.docker.com). They can be found [here](https://hub.docker.com/r/scssubstratee/substratee).
 
 The following demos are available:
   * [M1 Demo](./M1_DEMO.md) Private Counter

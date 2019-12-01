@@ -2,6 +2,9 @@
 
 clear
 
+# copy the intel SGX keys for remote attestation
+cp /substraTEE/intel_cert/*.txt /substraTEE/substraTEE-worker/bin/
+
 # configure and start the ipfs daemon
 ipfs init
 ipfs config Addresses.Gateway /ip4/0.0.0.0/tcp/8080
