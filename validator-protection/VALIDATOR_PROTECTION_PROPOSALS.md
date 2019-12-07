@@ -1,6 +1,6 @@
 # Validator Protection Proposals
 
-This document proposes different measures how NPOS blockchain validaotrs can protect their session key and achieve high availability.
+This document proposes different measures how NPOS blockchain validators can protect their session key and achieve high availability.
 
 ## Problem Statement
 
@@ -29,7 +29,7 @@ Verifying the first condition could be done by integrating a light client into a
 
 ![Block-Verifying](./Verifying_Remote_Signer.png)
 
-A light client can't easily validate intrinsics or extrinsics of block proposals because it has no knowledge of the FRAME code nor its externalities (state). It would have to query a full node for that and verify read proofs. Therefor, this approach is only partially satisfying.
+A light client can't easily validate intrinsics or extrinsics of block proposals because it has no knowledge of the FRAME code nor its externalities (state). It would have to query a full node for that and verify read proofs. Therefore, this approach is only partially satisfying.
 
 ### High Availability
 High availability with protection against double-signing could be achieved by introducing a 2-of-3 multisignature scheme for remote signers:
