@@ -36,7 +36,7 @@ High availability with protection against double-signing could be achieved by in
 
 ![High Availability](./High_Availability_Remote_Signer.png)
 
-sr25519 keys support signature aggregation, so we can introduce a multisig scheme which ensures that a validator is available whenever 2 of his 3 signers and at least one validator node are.
+sr25519 keys support signature aggregation, so we can introduce a multisig scheme which ensures that a **validator is available whenever 2 of his 3 signers and at least one validator node are**. This scheme also prevents double-signing.
 
 Signer TEEs have to cooperate and therefore have to trust each other. Trust among signer TEEs can be achieved through mutual remote attestation.
 
