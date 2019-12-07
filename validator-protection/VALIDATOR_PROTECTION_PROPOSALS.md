@@ -14,7 +14,7 @@ A second issue arises when the validator introduces redundancy in order to achie
 
 As a simple measure, the session key could be stored on a separate signer machine with hardened security. This would require substrate to support outsourcing the signing of block proposals.
 
-![Simple_Remote_Signer.png]
+![Simple Remote Signer](./Simple_Remote_Signer.png)
 
 The problem with this approach is that even if the private key would be well protected within a TEE or HSM, the signer would still sign whatever it is sent to sign, with no means to verify that the payload to be signed is legit. An attacker who gains the necessary privileges on the validator machine can still cause the validator to be slashed. While adding complexity, this approach does not improve security at all.
 
@@ -27,14 +27,14 @@ We would like the signer to only sign valid block proposals. Validity means:
   
 Verifying the first condition could be done by integrating a light client into a signer TEE. The TEE would protect the session key. It would know what the most recent block header is and only sign off block proposals that fulfill the first condition. The integrity guarantees of the TEE would ensure that the session key is never used to sign an outdated or unrelated block proposal.
 
-[!Verifying_Remote_Signer.png]
+![Block-Verifying](./Verifying_Remote_Signer.png)
 
 A light client can't easily validate intrinsics or extrinsics of block proposals because it has no knowledge of the FRAME code nor its externalities (state). It would have to query a full node for that and verify read proofs. Therefor, this approach is only partially satisfying.
 
 ### High Availability
 High availability with protection against double-signing could be achieved by introducing a 2-of-3 multisignature scheme for remote signers:
 
-![High_Availability_Remote_Signer.png]
+![High Availability](./High_Availability_Remote_Signer.png)
 
 sr25519 keys support signature aggregation, so we can introduce a multisig scheme which ensures that a validator is available whenever 2 of his 3 signers and at least one validator node are.
 
@@ -48,7 +48,7 @@ We propose that signers expose a json-rpc interface that allows the validator no
 
 All remote signing schemes suffer from the fact that they can't validate the contents of a block proposal (intrinsics and extrinsics). A better approach than remote signing could be to modify substrate to optionally execute blocks within a TEE. 
 
-![Block_Execution_in_TEE.png]
+![execution in TEE](./Block_Execution_in_TEE.png)
 
 This approach could be combined with the high-availability 2-of-3 proposal above.
 
