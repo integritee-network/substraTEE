@@ -8,7 +8,7 @@ NPOS validators sign various messages with hot keys, the *session keys*. These m
 
 A second issue arises when the validator introduces redundancy in order to achieve high availability. The validator could run several validator nodes (all using the same session keys). This, however, could cause accidential double signing of two different block proposals, which would be punished by slashing.
 
-Further, the session keys are not all necessarily of the same type. For example, one Substrate-based chain could have a set of session keys that include sr25519, ed25519, BLS12-381, or anything that has a verification implementation. Not all HSMs support such a variety of keys.
+Further, the session keys are not all necessarily of the same type. For example, one Substrate-based chain could have a set of session keys that includes sr25519, ed25519, BLS12-381, or anything that has a verification implementation. Not all HSMs support such a variety of keys.
 
 ## Possible Solutions
 
@@ -57,4 +57,3 @@ This approach could be combined with the high-availability 2-of-3 proposal above
 ### Replay Attack Mitigation
 
 All above proposals based on TEEs may suffer from replay attacks. If the TEE features monotonic counters, that would enable a reasonable mitigation. If not, we could consider to implement a [ROTE](https://eprint.iacr.org/2017/048.pdf) protocol.
-
