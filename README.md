@@ -1,6 +1,6 @@
 # substraTEE
 <p align="center">
-<img src=./substraTEE-logo-scs.png width=200><img src=./web3_foundation_grants_badge_black.svg width = 200>
+<img src=./substraTEE-logo-scs.png width=200><img src=./web3_foundation_grants_badge_black.svg width = 400>
 </p>
 
 *substraTEE* is an extension to [Parity Substrate](https://docs.substrate.dev/), allowing to call a custom state transition function (STF) inside a Trusted Execution Environment (TEE), namely an Intel SGX enclave thereby providing confidentiality and integrity. The enclaves operate on an encrypted state which can be read and written only by a set of provisioned and remote-attested enclaves.
