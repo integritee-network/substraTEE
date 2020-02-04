@@ -15,8 +15,12 @@ sleep 3s
 
 # start the worker 1
 cd /substraTEE/substraTEE-worker/bin
+# initialize empty state
+touch sealed_stf_state.bin
+# generate new keys and fetch them
 ./substratee_worker getsignkey 2>&1 | tee /substraTEE/output/worker1_getsignkey.log
 ./substratee_worker getpublickey 2>&1 | tee /substraTEE/output/worker1_getpublickey.log
+#run
 ./substratee_worker -p 9977 -w 9111 -r 8111 --ns 192.168.10.10 --ws 192.168.10.21 worker 2>&1 | tee /substraTEE/output/worker1.log
 
 read -p "Press enter to continue"
