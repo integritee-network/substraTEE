@@ -31,7 +31,12 @@ for f in files:
 
         if "tag" in content["dependencies"][package]: content["dependencies"][package].remove("tag")
         if "rev" in content["dependencies"][package]: content["dependencies"][package].remove("rev")
-        content["dependencies"][package]["rev"] = revision
+
+        # check for revision or branch
+        if "b_" in revision:
+            content["dependencies"][package]["branch"] = revision.replace("b_", "")
+        else:
+            content["dependencies"][package]["rev"] = revision
         print("  new content =", content["dependencies"][package])
 
         toml_file.write(content)
