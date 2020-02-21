@@ -29,7 +29,7 @@ pipeline {
                     } else {
                         echo "change dependencies on substrate_api_client to ${params.substrate_api_client_revision}"
                         sh './scripts/change-deps.py substratee-worker substrate-api-client ${params.substrate_api_client_revision} > change_deps_worker.log'
-                        sh './scripts/change-deps.py substratee-node substrate-api-client ${params.substrate_api_client_revision} > change_deps_node.log'
+                        // sh './scripts/change-deps.py substratee-node substrate-api-client ${params.substrate_api_client_revision} > change_deps_node.log'
                     }
                 }
                 sh 'ls -la'
