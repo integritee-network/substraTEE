@@ -42,12 +42,10 @@ pipeline {
                     }
 
                     // init the rust environment
-                    sh "source /opt/sgxsdk/environment"
-                    // sh "source /root/.cargo/env"
-                    // sh "/substraTEE/substratee-node/scripts/init.sh"
+                    sh "/substraTEE/substratee-node/scripts/init.sh"
 
                     // build the substraTEE-node
-                    // sh "cd /substratee-node && cargo build --release"
+                    sh "cd /substratee-node && cargo build --release"
                 }
                 sh "ls -la"
             }
