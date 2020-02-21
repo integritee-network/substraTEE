@@ -21,22 +21,22 @@ pipeline {
 
                 script {
                     // remove old directories and clone fresh copy
-                    sh 'rm -rf substratee-node substratee-worker'
+                    sh "rm -rf substratee-node substratee-worker"
 
                     echo "clone substraTEE-node and substraTEE-worker"
-                    sh 'git clone https://github.com/scs/substratee-node substratee-node'
-                    sh 'git clone https://github.com/scs/substratee-worker substratee-worker'
+                    sh "git clone https://github.com/scs/substratee-node substratee-node"
+                    sh "git clone https://github.com/scs/substratee-worker substratee-worker"
 
                     // change dependencies
                     if ( params.substrate_api_client_revision == "HEAD" ) {
                         echo "don't change dependencies on substrate_api_client"
                     } else {
                         echo "change dependencies on substrate_api_client to ${params.substrate_api_client_revision}"
-                        sh './scripts/change-deps.py substratee-worker substrate-api-client ${params.substrate_api_client_revision}'
+                        sh "./scripts/change-deps.py substratee-worker substrate-api-client ${params.substrate_api_client_revision}"
                         // sh './scripts/change-deps.py substratee-node substrate-api-client ${params.substrate_api_client_revision} > change_deps_node.log'
                     }
                 }
-                sh 'ls -la'
+                sh "ls -la"
             }
         }
     }
