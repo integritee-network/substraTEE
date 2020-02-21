@@ -18,6 +18,7 @@ pipeline {
         stage('Inside Docker') {
             steps {
                 echo sh(returnStdout: true, script: 'env')
+                echo sh(returnStdout: true, script: 'echo $0')
 
                 script {
                     // remove old directories and clone fresh copy
@@ -38,11 +39,11 @@ pipeline {
 
                     // init the rust environment
                     sh "source /opt/sgxsdk/environment"
-                    sh "source /root/.cargo/env"
-                    sh "/substraTEE/substratee-node/scripts/init.sh"
+                    // sh "source /root/.cargo/env"
+                    // sh "/substraTEE/substratee-node/scripts/init.sh"
 
                     // build the substraTEE-node
-                    sh "cd /substratee-node && cargo build --release"
+                    // sh "cd /substratee-node && cargo build --release"
                 }
                 sh "ls -la"
             }
