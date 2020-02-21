@@ -41,6 +41,13 @@ pipeline {
                 echo "Hello ${params.PERSON}"
                 sh 'ls -la'
                 echo sh(returnStdout: true, script: 'env')
+
+                if ( params.substrate_api_client_revision == "HEAD" ) {
+                    echo "substrate_api_client_revision is HEAD: ${param.substrate_api_client_revision}"
+                } else {
+                    echo "substrate_api_client_revision is not HEAD: ${param.substrate_api_client_revision}"
+                }
+
             }
         }
         stage('Inside Docker with set parameter') {
