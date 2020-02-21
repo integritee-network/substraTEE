@@ -7,7 +7,7 @@ pipeline {
         stage('Example') {
             steps {
                 echo "Hello ${params.PERSON}"
-                echo sh(returnStdout: true, script: 'env'
+                echo sh(returnStdout: true, script: 'env')
             }
         }
     }
