@@ -2,14 +2,9 @@ pipeline {
     agent none
     parameters {
         string(
-            name: 'PERSON',
-            defaultValue: 'Mr. Jenkins',
-            description: 'Who should I say hello to?'
-        )
-        string(
             name: 'substrate_api_client_revision',
             defaultValue: 'HEAD',
-            description: 'Revision of substrate-api-client to use'
+            description: 'Revision or branch of substrate-api-client to use. Prepend b_ for branch name'
         )
     }
     options {
@@ -23,21 +18,15 @@ pipeline {
                 label 'linux'
             }
             steps {
-                echo "Hello ${params.PERSON}"
                 sh 'ls -la'
                 echo sh(returnStdout: true, script: 'env')
             }
         }
-        stage('Inside Docker with default parameter') {
-            when {
-                expression { params.substrate_api_client_revision == "HEAD" }
-            }
+        stage('Inside Docker') {
             agent {
                 docker { image 'repository.scs-ad.scs.ch/substratee-docker-dev-local/substratee_generic:latest' }
             }
             steps {
-                echo "parameter substrate_api_client_revision is HEAD"
-                echo "substrate_api_client_revision = ${params.substrate_api_client_revision}"
                 echo "Hello ${params.PERSON}"
                 sh 'ls -la'
                 echo sh(returnStdout: true, script: 'env')
@@ -48,22 +37,11 @@ pipeline {
                     } else {
                         echo "substrate_api_client_revision is not HEAD: ${params.substrate_api_client_revision}"
                     }
+
+                    if ( params.substrate_api_client_revision.contains("b_")) {
+                        echo "string contains b_"
+                    }
                 }
-            }
-        }
-        stage('Inside Docker with set parameter') {
-            when {
-                expression { params.substrate_api_client_revision != "HEAD" }
-            }
-            agent {
-                docker { image 'repository.scs-ad.scs.ch/substratee-docker-dev-local/substratee_generic:latest' }
-            }
-            steps {
-                echo "parameter substrate_apisubstrate_api_client_revision_client not HEAD"
-                echo "substrate_api_client_revision = ${params.substrate_api_client_revision}"
-                echo "Hello ${params.PERSON}"
-                sh 'ls -la'
-                echo sh(returnStdout: true, script: 'env')
             }
         }
     }
