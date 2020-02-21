@@ -43,6 +43,9 @@ pipeline {
                 }
                 sh "ls -la"
 
+                // source the environments
+                sh ". /root/.cargo/env"
+
                 // init the rust environment
                 sh "/substraTEE/substratee-node/scripts/init.sh"
 
