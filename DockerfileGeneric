@@ -83,7 +83,7 @@ RUN mkdir /ipfs && \
     cd go-ipfs && \
     ./install.sh
 
-
-
-
 WORKDIR /substraTEE
+
+# start the docker image with the following command
+#   docker run -ti -v .:/substraTEE substratee
