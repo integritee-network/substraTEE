@@ -8,6 +8,7 @@ pipeline {
         )
         string(
             name: 'substrate_api_client_revision',
+            default: 'HEAD',
             description: 'Revision of substrate-api-client to use'
         )
     }
@@ -29,13 +30,13 @@ pipeline {
         }
         stage('Inside Docker with default parameter') {
             when {
-                expression { params.substrate_api_client_revision == "" }
+                expression { params.substrate_api_client_revision == "HEAD" }
             }
             agent {
                 docker { image 'repository.scs-ad.scs.ch/substratee-docker-dev-local/substratee_generic:latest' }
             }
             steps {
-                echo "parameter substrate_api_client_revision is empty"
+                echo "parameter substrate_api_client_revision is HEAD"
                 echo "substrate_api_client_revision = ${params.substrate_api_client_revision}"
                 echo "Hello ${params.PERSON}"
                 sh 'ls -la'
@@ -44,13 +45,13 @@ pipeline {
         }
         stage('Inside Docker with set parameter') {
             when {
-                expression { params.substrate_api_client_revision != "" }
+                expression { params.substrate_api_client_revision != "HEAD" }
             }
             agent {
                 docker { image 'repository.scs-ad.scs.ch/substratee-docker-dev-local/substratee_generic:latest' }
             }
             steps {
-                echo "parameter substrate_apisubstrate_api_client_revision_client not empty"
+                echo "parameter substrate_apisubstrate_api_client_revision_client not HEAD"
                 echo "substrate_api_client_revision = ${params.substrate_api_client_revision}"
                 echo "Hello ${params.PERSON}"
                 sh 'ls -la'
