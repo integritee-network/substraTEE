@@ -44,7 +44,7 @@ pipeline {
                 sh """#!/bin/bash
                     pwd
                     echo $PATH
-                    . /root/.cargo/env
+                    export PATH=/root/.cargo/bin:$PATH
                     echo $PATH
                     """
 
