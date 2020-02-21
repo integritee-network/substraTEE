@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'repository.scs-ad.scs.ch/substratee-docker-dev-local/substratee_generic:latest'
-            args '-u root:root /bin/bash'
+            args '-u root:root'
         }
     }
     parameters {
