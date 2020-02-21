@@ -41,6 +41,11 @@ pipeline {
                         // sh './scripts/change-deps.py substratee-node substrate-api-client ${params.substrate_api_client_revision} > change_deps_node.log'
                     }
                 }
+                sh """#!/bin/bash
+                    pwd
+                    echo $PATH
+                    """
+
                 sh "ls -la"
 
                 // source the environments
