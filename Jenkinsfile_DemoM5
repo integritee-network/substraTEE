@@ -29,8 +29,8 @@ pipeline {
                     sh "rm -rf substratee-node substratee-worker"
 
                     echo "clone substraTEE-node and substraTEE-worker"
-                    sh "git clone https://github.com/scs/substratee-node substratee-node"
-                    sh "git clone https://github.com/scs/substratee-worker substratee-worker"
+                    sh "git clone https://github.com/scs/substratee-node /substraTEE/substratee-node"
+                    sh "git clone https://github.com/scs/substratee-worker /substraTEE/substratee-worker"
 
                     // change dependencies
                     if ( params.substrate_api_client_revision == "HEAD" ) {
