@@ -1,5 +1,7 @@
 pipeline {
-    agent none
+    agent {
+        docker { image 'repository.scs-ad.scs.ch/substratee-docker-dev-local/substratee_generic:latest' }
+    }
     parameters {
         string(
             name: 'substrate_api_client_revision',
@@ -14,9 +16,6 @@ pipeline {
     }
     stages {
         stage('Inside Docker') {
-            agent {
-                docker { image 'repository.scs-ad.scs.ch/substratee-docker-dev-local/substratee_generic:latest' }
-            }
             steps {
                 echo sh(returnStdout: true, script: 'env')
 
@@ -28,11 +27,7 @@ pipeline {
                     if ( params.substrate_api_client_revision == "HEAD" ) {
                         echo "don't change dependencies on substrate_api_client"
                     } else {
-                        if ( params.substrate_api_client_revision.contains("b_")) {
-                            echo "change dependencies on substrate_api_client to branch ${params.substrate_api_client_revision}"
-                        } else {
-                            echo "change dependencies on substrate_api_client to revision ${params.substrate_api_client_revision}"
-                        }
+                        echo "change dependencies on substrate_api_client to ${params.substrate_api_client_revision}"
                         sh './scripts/change-deps.py substratee-worker substrate-api-client ${params.substrate_api_client_revision} > change_deps_worker.log'
                         sh './scripts/change-deps.py substratee-node substrate-api-client ${params.substrate_api_client_revision} > change_deps_node.log'
                     }
