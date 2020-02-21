@@ -27,21 +27,23 @@ pipeline {
                 docker { image 'repository.scs-ad.scs.ch/substratee-docker-dev-local/substratee_generic:latest' }
             }
             steps {
-                echo "Hello ${params.PERSON}"
-                sh 'ls -la'
                 echo sh(returnStdout: true, script: 'env')
 
                 script {
-                    if ( params.substrate_api_client_revision == "HEAD" ) {
-                        echo "substrate_api_client_revision is HEAD: ${params.substrate_api_client_revision}"
-                    } else {
-                        echo "substrate_api_client_revision is not HEAD: ${params.substrate_api_client_revision}"
-                    }
+                    sh 'git clone https://github.com/scs/substratee-node substratee-node'
+                    sh 'git clone https://github.com/scs/substratee-worker substratee-worker'
 
-                    if ( params.substrate_api_client_revision.contains("b_")) {
-                        echo "string contains b_"
+                    if ( params.substrate_api_client_revision == "HEAD" ) {
+                        echo "don't change dependencies on substrate_api_client"
+                    } else {
+                        if ( params.substrate_api_client_revision.contains("b_")) {
+                            echo "change dependencies on substrate_api_client to branch ${params.substrate_api_client_revision}"
+                        } else {
+                            echo "change dependencies on substrate_api_client to revision ${params.substrate_api_client_revision}"
+                        }
                     }
                 }
+                sh 'ls -la'
             }
         }
     }
