@@ -1,15 +1,16 @@
 pipeline {
-    agent {
-        docker { image 'repository.scs-ad.scs.ch/substratee-docker-dev-local/substratee_generic:latest' }
-    }
+    agent none
     parameters {
         string(name: 'PERSON', defaultValue: 'Mr. Jenkins', description: 'Who should I say hello to?')
     }
     stages {
-        stage('Example') {
+        stage('Inside Docker') {
+            agent {
+                docker { image 'repository.scs-ad.scs.ch/substratee-docker-dev-local/substratee_generic:latest' }
+            }
             steps {
                 echo "Hello ${params.PERSON}"
-                echo sh(returnStdout: true, script: 'ls -la')
+                sh 'ls -la'
                 echo sh(returnStdout: true, script: 'env')
             }
         }
