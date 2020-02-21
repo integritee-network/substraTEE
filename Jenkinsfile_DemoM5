@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        docker { image 'repository.scs-ad.scs.ch/substratee-docker-dev-local/substratee_generic:latest' }
+    }
     parameters {
         string(name: 'PERSON', defaultValue: 'Mr. Jenkins', description: 'Who should I say hello to?')
     }
