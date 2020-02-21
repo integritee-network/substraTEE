@@ -86,8 +86,7 @@ RUN mkdir /ipfs && \
 
 # source SGX and rust environment
 RUN source /opt/sgxsdk/environment && \
-    source /root/.cargo/env && \
-    /substraTEE/substraTEE-node/scripts/init.sh
+    source /root/.cargo/env
 
 WORKDIR /substraTEE
 
