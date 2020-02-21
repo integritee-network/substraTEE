@@ -4,6 +4,16 @@ pipeline {
         string(name: 'PERSON', defaultValue: 'Mr. Jenkins', description: 'Who should I say hello to?')
     }
     stages {
+        stage('Outside Docker') {
+            agent {
+                label 'linux'
+            }
+            steps {
+                echo "Hello ${params.PERSON}"
+                sh 'ls -la'
+                echo sh(returnStdout: true, script: 'env')
+            }
+        }
         stage('Inside Docker') {
             agent {
                 docker { image 'repository.scs-ad.scs.ch/substratee-docker-dev-local/substratee_generic:latest' }
