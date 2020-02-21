@@ -46,6 +46,7 @@ RUN apt-get update && \
     clang libclang-dev rsync ca-certificates && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /var/cache/apt/archives/*
+RUN pip3 install tomlkit
 
 # install the Intel SGX PSW and SDK
 RUN mkdir /root/sgx && \
