@@ -48,12 +48,10 @@ pipeline {
                     echo Adding cargo to path
                     export PATH=/root/.cargo/bin:\$PATH
                     echo \$PATH
+                    /substraTEE/substratee-node/scripts/init.sh
                     """
 
                 sh "ls -la"
-
-                // init the rust environment
-                sh "/substraTEE/substratee-node/scripts/init.sh"
 
                 // build the substraTEE-node
                 sh "cd /substratee-node && cargo build --release"
