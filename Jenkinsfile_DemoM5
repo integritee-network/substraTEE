@@ -44,9 +44,9 @@ pipeline {
 
                 script {
                     if ( params.substrate_api_client_revision == "HEAD" ) {
-                        echo "substrate_api_client_revision is HEAD: ${param.substrate_api_client_revision}"
+                        echo "substrate_api_client_revision is HEAD: ${params.substrate_api_client_revision}"
                     } else {
-                        echo "substrate_api_client_revision is not HEAD: ${param.substrate_api_client_revision}"
+                        echo "substrate_api_client_revision is not HEAD: ${params.substrate_api_client_revision}"
                     }
                 }
             }
