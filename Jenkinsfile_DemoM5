@@ -20,14 +20,28 @@ pipeline {
                 echo sh(returnStdout: true, script: 'env')
             }
         }
-        stage('Inside Docker') {
+        stage('Inside Docker with default parameter') {
+            when {
+                expression { params.substrate_api_client_revision == GIT_BRANCH }
+            }
             agent {
                 docker { image 'repository.scs-ad.scs.ch/substratee-docker-dev-local/substratee_generic:latest' }
             }
             steps {
-                when {
-                    expression { params.substrate_api_client_revision == GIT_BRANCH }
-                }
+                echo "parameter substrate_api_client == GIT_BRANCH"
+                echo "Hello ${params.PERSON}"
+                sh 'ls -la'
+                echo sh(returnStdout: true, script: 'env')
+            }
+        }
+        stage('Inside Docker with set parameter') {
+            when {
+                expression { params.substrate_api_client_revision != GIT_BRANCH }
+            }
+            agent {
+                docker { image 'repository.scs-ad.scs.ch/substratee-docker-dev-local/substratee_generic:latest' }
+            }
+            steps {
                 echo "parameter substrate_api_client == GIT_BRANCH"
                 echo "Hello ${params.PERSON}"
                 sh 'ls -la'
