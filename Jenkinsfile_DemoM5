@@ -30,6 +30,7 @@ pipeline {
                 echo sh(returnStdout: true, script: 'env')
 
                 script {
+                    sh 'rm -rf substratee-node substratee-worker'
                     sh 'git clone https://github.com/scs/substratee-node substratee-node'
                     sh 'git clone https://github.com/scs/substratee-worker substratee-worker'
 
@@ -45,6 +46,11 @@ pipeline {
                 }
                 sh 'ls -la'
             }
+        }
+    }
+    post {
+        always {
+            cleanWs()
         }
     }
 }
