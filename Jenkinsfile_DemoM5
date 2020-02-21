@@ -2,6 +2,12 @@ pipeline {
     agent none
     parameters {
         string(name: 'PERSON', defaultValue: 'Mr. Jenkins', description: 'Who should I say hello to?')
+        string(name: 'substrate_api_client_revision', defaultValue: '${GIT_BRANCH}', description: 'Revision of substrate-api-client to use')
+    }
+    options {
+        timeout(time: 2, unit: 'HOURS')
+        buildDiscarder(logRotator(numToKeepStr: '5'))
+        timestamps()
     }
     stages {
         stage('Outside Docker') {
@@ -19,9 +25,16 @@ pipeline {
                 docker { image 'repository.scs-ad.scs.ch/substratee-docker-dev-local/substratee_generic:latest' }
             }
             steps {
+                when {
+                    expression { params.substrate_api_client_revision == GIT_BRANCH }
+                }
+                echo "parameter substrate_api_client == GIT_BRANCH"
                 echo "Hello ${params.PERSON}"
                 sh 'ls -la'
                 echo sh(returnStdout: true, script: 'env')
+            }
+            steps {
+                echo "Always executed"
             }
         }
     }
