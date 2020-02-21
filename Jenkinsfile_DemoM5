@@ -44,6 +44,7 @@ pipeline {
                 // build the substraTEE components
                 sh """#!/bin/bash
                     export PATH=/root/.cargo/bin:\$PATH
+                    source /opt/sgxsdk/environment
                     /substraTEE/substratee-node/scripts/init.sh
                     cd /substraTEE/substratee-node && cargo build --release
                     """
