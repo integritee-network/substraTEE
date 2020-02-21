@@ -40,14 +40,15 @@ pipeline {
                         sh "./scripts/change-deps.py substratee-worker substrate-api-client ${params.substrate_api_client_revision}"
                         // sh './scripts/change-deps.py substratee-node substrate-api-client ${params.substrate_api_client_revision} > change_deps_node.log'
                     }
-
-                    // init the rust environment
-                    sh "/substraTEE/substratee-node/scripts/init.sh"
-
-                    // build the substraTEE-node
-                    sh "cd /substratee-node && cargo build --release"
                 }
                 sh "ls -la"
+
+                // init the rust environment
+                sh "/substraTEE/substratee-node/scripts/init.sh"
+
+                // build the substraTEE-node
+                sh "cd /substratee-node && cargo build --release"
+
             }
         }
     }
