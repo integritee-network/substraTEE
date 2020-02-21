@@ -8,7 +8,7 @@ pipeline {
         )
         string(
             name: 'substrate_api_client_revision',
-            default: 'HEAD',
+            defaultValue: 'HEAD',
             description: 'Revision of substrate-api-client to use'
         )
     }
