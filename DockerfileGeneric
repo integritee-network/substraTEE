@@ -39,7 +39,7 @@ SHELL ["/bin/bash", "-c"]
 RUN apt-get update && \
     apt-get install -y --no-install-recommends\
     build-essential ocaml ocamlbuild automake autoconf \
-    libtool wget python libssl-dev libcurl4-openssl-dev protobuf-compiler \
+    libtool wget python python3-pip libssl-dev libcurl4-openssl-dev protobuf-compiler \
     libprotobuf-dev kmod vim curl git-core libprotobuf-c0-dev \
     libboost-thread-dev libboost-system-dev liblog4cpp5-dev libjsoncpp-dev \
     alien uuid-dev libxml2-dev cmake pkg-config expect systemd-sysv gdb unzip \

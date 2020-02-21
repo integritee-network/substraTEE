@@ -20,10 +20,16 @@ pipeline {
                 echo sh(returnStdout: true, script: 'env')
 
                 script {
-                    sh 'rm -rf substratee-node substratee-worker'
+                    // install python3 tomlkit
+                    sh 'pip3 install tomlkit'
+
+                    // remove old directories and clone fresh copy
+                    // sh 'rm -rf substratee-node substratee-worker'
+                    echo "clone substraTEE-node and substraTEE-worker"
                     sh 'git clone https://github.com/scs/substratee-node substratee-node'
                     sh 'git clone https://github.com/scs/substratee-worker substratee-worker'
 
+                    // change dependencies
                     if ( params.substrate_api_client_revision == "HEAD" ) {
                         echo "don't change dependencies on substrate_api_client"
                     } else {
