@@ -19,6 +19,7 @@ pipeline {
             steps {
                 echo sh(returnStdout: true, script: 'env')
                 echo sh(returnStdout: true, script: 'echo $0')
+                echo sh(returnStdout: true, script: '/root/.cargo/bin/rustup show')
 
                 script {
                     // remove old directories and clone fresh copy
