@@ -33,9 +33,6 @@ pipeline {
                 sh 'ls -la'
                 echo sh(returnStdout: true, script: 'env')
             }
-            steps {
-                echo "Always executed"
-            }
         }
     }
 }
