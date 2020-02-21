@@ -43,7 +43,9 @@ pipeline {
                 }
                 sh """#!/bin/bash
                     pwd
+                    echo $0
                     echo $PATH
+                    echo Adding cargo to path
                     export PATH=/root/.cargo/bin:$PATH
                     echo $PATH
                     """
