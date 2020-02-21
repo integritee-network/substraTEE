@@ -2,7 +2,7 @@ pipeline {
     agent none
     parameters {
         string(name: 'PERSON', defaultValue: 'Mr. Jenkins', description: 'Who should I say hello to?')
-        string(name: 'substrate_api_client_revision', defaultValue: '${GIT_BRANCH}', description: 'Revision of substrate-api-client to use')
+        string(name: 'substrate_api_client_revision', defaultValue: ${GIT_BRANCH}, description: 'Revision of substrate-api-client to use')
     }
     options {
         timeout(time: 2, unit: 'HOURS')
