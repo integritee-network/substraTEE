@@ -9,7 +9,7 @@ pipeline {
         stage('Example') {
             steps {
                 echo "Hello ${params.PERSON}"
-                echo "ls -la"
+                echo sh(returnStdout: true, script: 'ls -la')
                 echo sh(returnStdout: true, script: 'env')
             }
         }
