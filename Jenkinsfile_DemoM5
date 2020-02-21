@@ -44,12 +44,11 @@ pipeline {
                 sh """#!/bin/bash
                     pwd
                     echo $PATH
+                    source /root/.cargo/env
+                    echo $PATH
                     """
 
                 sh "ls -la"
-
-                // source the environments
-                sh ". /root/.cargo/env"
 
                 // init the rust environment
                 sh "/substraTEE/substratee-node/scripts/init.sh"
