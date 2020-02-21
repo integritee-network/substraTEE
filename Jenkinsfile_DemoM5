@@ -41,21 +41,12 @@ pipeline {
                         // sh './scripts/change-deps.py substratee-node substrate-api-client ${params.substrate_api_client_revision} > change_deps_node.log'
                     }
                 }
+                // build the substraTEE components
                 sh """#!/bin/bash
-                    pwd
-                    echo \$0
-                    echo \$PATH
-                    echo Adding cargo to path
                     export PATH=/root/.cargo/bin:\$PATH
-                    echo \$PATH
                     /substraTEE/substratee-node/scripts/init.sh
+                    cd /substraTEE/substratee-node && cargo build --release
                     """
-
-                sh "ls -la"
-
-                // build the substraTEE-node
-                sh "cd /substratee-node && cargo build --release"
-
             }
         }
     }
