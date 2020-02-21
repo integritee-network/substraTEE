@@ -84,6 +84,11 @@ RUN mkdir /ipfs && \
     cd go-ipfs && \
     ./install.sh
 
+# source SGX and rust environment
+RUN source /opt/sgxsdk/environment && \
+    source /root/.cargo/env && \
+    /substraTEE/substraTEE-node/scripts/init.sh
+
 WORKDIR /substraTEE
 
 # start the docker image with the following command
