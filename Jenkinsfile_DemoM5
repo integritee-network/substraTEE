@@ -47,9 +47,8 @@ pipeline {
                     source /root/.cargo/env
                     source /opt/sgxsdk/environment
                     /substraTEE/substratee-node/scripts/init.sh
+                    cd /substraTEE/substratee-worker && make
                     cd /substraTEE/substratee-node && cargo build --release
-                    cd /substraTEE/substratee-worker
-                    make
                     """
             }
         }
