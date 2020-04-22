@@ -1,15 +1,33 @@
+# Copyright 2020 Supercomputing Systems AG
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#           http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Generic Dockerfile for Intel SGX development and CI machines
+#  Based on Ubuntu
+#  Intel SGX SDK and PSW installed
+#  Rust-sgx-sdk installed
+#  IPFS installed
+# Use the script 'docker_build.sh' to build the docker image
 
 ARG VERSION_UBUNTU
 ARG VERSION_RUST_SGX_SDK
 
-FROM baiduxlab/sgx-rust:$VERSION_UBUNTU-$VERSION_RUST_SGX_SDK as builder
+FROM baiduxlab/sgx-rust:$VERSION_UBUNTU-$VERSION_RUST_SGX_SDK as development
 
 ARG VERSION_IPFS
 RUN echo "VERSION_IPFS = ${VERSION_IPFS}"
 
 SHELL ["/bin/bash", "-c"]
-ENV DEBIAN_FRONTEND=noninteractive
-ENV TERM xterm
 
 # install rsync
 RUN apt-get update && \
@@ -26,9 +44,13 @@ RUN mkdir -p /ipfs && \
     cd go-ipfs && \
     ./install.sh
 
-# source SGX and rust environment
-RUN /bin/bash -c "source /opt/sgxsdk/environment" && \
-    /bin/bash -c "source /root/.cargo/env"
-
 # install WASM toolchain
 RUN /root/.cargo/bin/rustup target install wasm32-unknown-unknown
+
+# set environment variables
+ENV DEBIAN_FRONTEND noninteractive
+ENV TERM xterm
+ENV SGX_SDK /opt/sgxsdk
+ENV PATH "$PATH:${SGX_SDK}/bin:${SGX_SDK}/bin/x64:/root/.cargo/bin"
+ENV PKG_CONFIG_PATH "${PKG_CONFIG_PATH}:${SGX_SDK}/pkgconfig"
+ENV LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:${SGX_SDK}/sdk_libs"
