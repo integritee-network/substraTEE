@@ -47,6 +47,12 @@ RUN mkdir -p /ipfs && \
 # install WASM toolchain
 RUN /root/.cargo/bin/rustup target install wasm32-unknown-unknown
 
+# install packages needed for substrate
+RUN apt-get update && \
+    apt-get install -y cmake pkg-config libssl-dev git gcc build-essential clang libclang-dev && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /var/cache/apt/archives/*
+
 # set environment variables
 ENV DEBIAN_FRONTEND noninteractive
 ENV TERM xterm
