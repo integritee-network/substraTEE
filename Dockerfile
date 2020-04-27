@@ -54,9 +54,12 @@ RUN apt-get update && \
     rm -rf /var/cache/apt/archives/*
 
 # install LLVM to compile ring into WASM
-RUN wget https://apt.llvm.org/llvm.sh && \
+RUN apt-get update && \
+    wget https://apt.llvm.org/llvm.sh && \
     chmod +x llvm.sh && \
-    sudo ./llvm.sh 10
+    sudo ./llvm.sh 10 && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /var/cache/apt/archives/*
 
 # set environment variables
 ENV DEBIAN_FRONTEND noninteractive
