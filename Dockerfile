@@ -53,6 +53,11 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /var/cache/apt/archives/*
 
+# install LLVM to compile ring into WASM
+RUN wget https://apt.llvm.org/llvm.sh && \
+    chmod +x llvm.sh && \
+    sudo ./llvm.sh 10
+
 # set environment variables
 ENV DEBIAN_FRONTEND noninteractive
 ENV TERM xterm
@@ -60,3 +65,5 @@ ENV SGX_SDK /opt/sgxsdk
 ENV PATH "$PATH:${SGX_SDK}/bin:${SGX_SDK}/bin/x64:/root/.cargo/bin"
 ENV PKG_CONFIG_PATH "${PKG_CONFIG_PATH}:${SGX_SDK}/pkgconfig"
 ENV LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:${SGX_SDK}/sdk_libs"
+ENV CC /usr/bin/clang-10
+ENV AR /usr/bin/llvm-ar-10
