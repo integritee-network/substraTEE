@@ -1,0 +1,61 @@
+# Copyright 2019 Supercomputing Systems AG
+
+# This dockerfile is used to run the M6 milestone from the substraTEE project
+
+FROM scssubstratee/substratee_dev:18.04-2.9.1-1.1.2
+
+# substraTEE files
+ENV substratee_node_release master
+ENV substratee_worker_release master
+ENV substratee_node https://github.com/scs/substraTEE-node/archive/${substratee_node_release}.zip
+ENV substratee_worker https://github.com/scs/substraTEE-worker/archive/${substratee_worker_release}.zip
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TERM xterm
+
+SHELL ["/bin/bash", "-c"]
+
+# install additional tools
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends\
+    tmux unzip && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /var/cache/apt/archives/*
+
+# downloading and extracting the substraTEE components
+RUN mkdir /substraTEE && \
+    wget -O /substraTEE/substraTEE-node.zip ${substratee_node} && \
+    wget -O /substraTEE/substraTEE-worker.zip ${substratee_worker} && \
+    cd /substraTEE && \
+    unzip substraTEE-node.zip && \
+    mv substraTEE-node-${substratee_node_release} substraTEE-node && \
+    unzip substraTEE-worker.zip && \
+    mv substraTEE-worker-${substratee_worker_release} substraTEE-worker && \
+    rm substraTEE-*.zip
+
+# build the substraTEE-node
+RUN source /opt/sgxsdk/environment && \
+    source /root/.cargo/env && \
+    cd /substraTEE/substraTEE-node && \
+    cargo build --release && \
+    rm -rf target/release/deps && \
+    rm -rf target/release/wbuild && \
+    rm -rf target/release/build && \
+    rm -rf target/release/wbuild-runner
+
+# build the substraTEE-worker
+RUN source /opt/sgxsdk/environment && \
+    source /root/.cargo/env && \
+    cd /substraTEE/substraTEE-worker && \
+    make && \
+    rm -rf target/release/deps && \
+    rm -rf target/release/wbuild && \
+    rm -rf target/release/build && \
+    rm -rf target/release/wbuild-runner && \
+    rm -rf enclave/target/release/deps && \
+    rm -rf enclave/target/release/build
+
+# copy the shell scripts to the docker to launch to node, the worker and the client
+COPY scriptsM6/* /substraTEE/
+
+WORKDIR /substraTEE
