@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # name of the docker image
-DOCKER_IMAGE=scssubstratee/substratee:M6_RC1
+DOCKER_IMAGE=scssubstratee/substratee:M6_RC01
 
 # clone the rust-sgx-sdk (used to run the substratee-worker in the docker)
 git clone https://github.com/baidu/rust-sgx-sdk.git
@@ -10,7 +10,7 @@ git clone https://github.com/baidu/rust-sgx-sdk.git
 docker pull $DOCKER_IMAGE
 
 # if you want to build the docker image yourself, use the following command:
-# docker build -t scssubstratee/substratee:M6_RC1 -f DockerfileM6 .
+# docker build -t scssubstratee/substratee:M6_RC01 -f DockerfileM6 .
 
 # prepare the docker specific network
 docker network rm substratee-net

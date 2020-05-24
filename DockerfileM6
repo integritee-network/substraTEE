@@ -5,8 +5,8 @@
 FROM scssubstratee/substratee_dev:18.04-2.9.1-1.1.2
 
 # substraTEE files
-ENV substratee_node_release master
-ENV substratee_worker_release master
+ENV substratee_node_release M6
+ENV substratee_worker_release M6
 ENV substratee_node https://github.com/scs/substraTEE-node/archive/${substratee_node_release}.zip
 ENV substratee_worker https://github.com/scs/substraTEE-worker/archive/${substratee_worker_release}.zip
 
