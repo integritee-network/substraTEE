@@ -19,6 +19,9 @@
 #  IPFS installed
 # Use the script 'docker_build.sh' to build the docker image
 
+# The docker image can be downloaded from
+# https://hub.docker.com/repository/docker/scssubstratee/substratee_dev/
+
 ARG VERSION_UBUNTU
 ARG VERSION_RUST_SGX_SDK
 

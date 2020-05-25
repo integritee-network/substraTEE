@@ -27,5 +27,5 @@ docker build --target development \
     --build-arg VERSION_UBUNTU=$VERSION_UBUNTU \
     --build-arg VERSION_RUST_SGX_SDK=$VERSION_RUST_SGX_SDK \
     --build-arg VERSION_IPFS=$VERSION_IPFS \
-    -t substratee_development:$VERSION_UBUNTU-$VERSION_INTEL_SGX_SDK-$VERSION_RUST_SGX_SDK \
+    -t scssubstratee/substratee_dev:$VERSION_UBUNTU-$VERSION_INTEL_SGX_SDK-$VERSION_RUST_SGX_SDK \
     -f ./Dockerfile .

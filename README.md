@@ -119,6 +119,18 @@ The remaining functionality of the *substraTEE-worker* stays the same as for M1 
 
 The exchange of critical information between the enclaves is performed over a secure connection (TLS). The two enclaves perform a mutual remote attestation before exchanging any secrets.
 
+## Docker image for development
+We provide a generic docker image that contains all required components to build and run the substraTEE components. This can be used for development or CI machines.
+
+If you want to build the docker image yourself, use the following command:
+```bash
+./docker_build.sh
+```
+
+This script will define the desired versions of the components and build the Docker as described in the `Dockerfile`.
+
+Pre-built docker images are also available on [docker hub](https://hub.docker.com/repository/docker/scssubstratee/substratee_dev/tags).
+
 ## Demo
 
 This repo hosts docker files to showcase the milestones.
