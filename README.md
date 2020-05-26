@@ -130,6 +130,7 @@ The following demos are available:
   * [M2 Demo](./M2_DEMO.md) Private Counter in WASM
   * [M4 Demo](./M4_DEMO.md) Redundancy with Private Counter
   * [M5 Demo](./M5_DEMO.md) Private Transactions
+  * M6 Demo: Shielding tokens, private transaction, unshielding tokens
 
 If you're impatient, [watch our M5 demo on youtube](https://youtu.be/UQysB3MpOuk)
 
