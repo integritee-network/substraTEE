@@ -3,7 +3,7 @@
 <img src=./substraTEE-logo-scs.png width=200><img src=./web3_foundation_grants_badge_black.svg width = 400>
 </p>
 
-*please visit [www.substratee-com](https://www.substratee-com) for up to date information*
+*please visit [www.substratee.com](https://www.substratee.com) for up to date information*
 
 ## OUTDATED:
 
