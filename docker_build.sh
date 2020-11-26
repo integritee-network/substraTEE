@@ -19,6 +19,7 @@ export VERSION_UBUNTU=1804
 export VERSION_RUST_SGX_SDK=1.1.3
 export VERSION_INTEL_SGX_SDK=2.12
 export VERSION_IPFS=0.4.21
+export VERSION_IMAGE=001
 
 set -ex
 
@@ -27,5 +28,5 @@ docker build --target development \
     --build-arg VERSION_UBUNTU=$VERSION_UBUNTU \
     --build-arg VERSION_RUST_SGX_SDK=$VERSION_RUST_SGX_SDK \
     --build-arg VERSION_IPFS=$VERSION_IPFS \
-    -t scssubstratee/substratee_dev:$VERSION_UBUNTU-$VERSION_INTEL_SGX_SDK-$VERSION_RUST_SGX_SDK \
+    -t scssubstratee/substratee_dev:$VERSION_UBUNTU-$VERSION_INTEL_SGX_SDK-$VERSION_RUST_SGX_SDK-$VERSION_IMAGE \
     -f ./Dockerfile .
