@@ -16,8 +16,8 @@
 
 # Set the correct version numbers
 export VERSION_UBUNTU=1804
-export VERSION_RUST_SGX_SDK=1.1.2
-export VERSION_INTEL_SGX_SDK=2.9.1
+export VERSION_RUST_SGX_SDK=1.1.3
+export VERSION_INTEL_SGX_SDK=2.12
 export VERSION_IPFS=0.4.21
 
 set -ex
