@@ -64,6 +64,12 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /var/cache/apt/archives/*
 
+# install additional tools
+RUN apt-get update && \
+    apt-get install -y tmux nano && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /var/cache/apt/archives/*
+
 # set environment variables
 ENV DEBIAN_FRONTEND noninteractive
 ENV TERM xterm
