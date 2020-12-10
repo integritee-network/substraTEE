@@ -70,9 +70,12 @@ RUN apt-get update && \
 ARG USER_ID
 ARG GROUP_ID
 
-RUN addgroup --gid $GROUP_ID user
-RUN adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID user
-USER user
+RUN addgroup --gid $GROUP_ID devadmin
+RUN adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID devadmin
+# make add user to sudoer
+RUN adduser devadmin sudo
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+USER devadmin
 
 # install rust as the current user
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
