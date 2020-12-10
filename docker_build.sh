@@ -20,6 +20,8 @@ export VERSION_RUST_SGX_SDK=1.1.3
 export VERSION_INTEL_SGX_SDK=2.12
 export VERSION_IPFS=0.4.21
 export VERSION_IMAGE=001
+export USER_ID=$(id -u)
+export GROUP_ID=$(id -g)
 
 set -ex
 
@@ -28,5 +30,7 @@ docker build --target development \
     --build-arg VERSION_UBUNTU=$VERSION_UBUNTU \
     --build-arg VERSION_RUST_SGX_SDK=$VERSION_RUST_SGX_SDK \
     --build-arg VERSION_IPFS=$VERSION_IPFS \
-    -t scssubstratee/substratee_dev:$VERSION_UBUNTU-$VERSION_INTEL_SGX_SDK-$VERSION_RUST_SGX_SDK-$VERSION_IMAGE \
+    --build-arg USER_ID=$USER_ID \
+    --build-arg GROUP_ID=$GROUP_ID \
+    -t scssubstratee/substratee_dev:$VERSION_UBUNTU-$VERSION_INTEL_SGX_SDK-$VERSION_RUST_SGX_SDK-$VERSION_IMAGE-user-$USER_ID-group-$GROUP_ID \
     -f ./Dockerfile .

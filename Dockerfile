@@ -47,9 +47,6 @@ RUN mkdir -p /ipfs && \
     cd go-ipfs && \
     ./install.sh
 
-# install WASM toolchain
-RUN /root/.cargo/bin/rustup target install wasm32-unknown-unknown
-
 # install packages needed for substrate
 RUN apt-get update && \
     apt-get install -y cmake pkg-config libssl-dev git gcc build-essential clang libclang-dev && \
@@ -70,11 +67,23 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /var/cache/apt/archives/*
 
+ARG USER_ID
+ARG GROUP_ID
+
+RUN addgroup --gid $GROUP_ID user
+RUN adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID user
+USER user
+
+# install rust as the current user
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+# install WASM toolchain
+RUN $HOME/.cargo/bin/rustup target install wasm32-unknown-unknown
+
 # set environment variables
 ENV DEBIAN_FRONTEND noninteractive
 ENV TERM xterm
 ENV SGX_SDK /opt/sgxsdk
-ENV PATH "$PATH:${SGX_SDK}/bin:${SGX_SDK}/bin/x64:/root/.cargo/bin"
+ENV PATH "$PATH:${SGX_SDK}/bin:${SGX_SDK}/bin/x64:${HOME}/.cargo/bin"
 ENV PKG_CONFIG_PATH "${PKG_CONFIG_PATH}:${SGX_SDK}/pkgconfig"
 ENV LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:${SGX_SDK}/sdk_libs"
 ENV CC /usr/bin/clang-10
