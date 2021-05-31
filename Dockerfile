@@ -76,6 +76,8 @@ RUN adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID devadm
 RUN adduser devadmin sudo
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 USER devadmin
+ENV HOME /home/devadmin
+WORKDIR $HOME
 
 # install rust as the current user
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
