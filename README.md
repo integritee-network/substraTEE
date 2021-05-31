@@ -142,7 +142,15 @@ If you want to build the docker image yourself, use the following command:
 
 This script will define the desired versions of the components and build the Docker as described in the `Dockerfile`.
 
-Pre-built docker images are also available on [docker hub](https://hub.docker.com/repository/docker/scssubstratee/substratee_dev/tags).
+It also adds the current user to the docker. The docker will start by default with the `USER_ID` and `GROUP_ID` that executed the build afterwards. This takes care of permission issues on docker generated/modified files and it allows seamless editing on the host while building and running in the docker.
+
+The following command mounts the current directory into docker and publishes the default ports of the binaries to the host:
+
+```
+docker run -it --mount "type=bind,src=$(pwd),dst=/opt/shared" --workdir /opt/shared  -p 9979:9944 -p 2079:2000 -p 3079:3443 scssubstratee/substratee_dev:1804-2.12-1.1.3-001-user-1000-group-1000 /bin/bash
+```
+
+Pre-built docker images are also available on [docker hub](https://hub.docker.com/repository/docker/scssubstratee/substratee_dev/tags). **Note:** The pre-built images will always run as root. Any files generated withing docker can only be changed with root access.
 
 ## Demo
 
